@@ -62,7 +62,7 @@ namespace PatPortal.Domain.Services
             await Task.WhenAll(userTask, postTask);
 
            if (postTask.Result == default)
-                throw new EntityNotFoundException($"Post with id: {postUpdate.Id} not found;");
+                throw new EntityNotFoundException($"Post with id: {postUpdate.Id} not found.");
 
             var post = new Post(
                 postUpdate.Id,
@@ -112,9 +112,9 @@ namespace PatPortal.Domain.Services
             await Task.WhenAll(postTasks);
 
             IEnumerable<Post> posts = new List<Post>();
-            foreach (var postTaks in postTasks)
+            foreach (var postTask in postTasks)
             {
-                var friendPosts = postTaks.Result;
+                var friendPosts = postTask.Result;
                 posts = posts.Union(friendPosts);
             }
 

@@ -156,12 +156,7 @@ namespace PatPortal.Unit.Tests.Domain.Services
             string errMsg)
         {
             //Arrange
-            byte[] fileBytes;
-            if (!imgPath.Equals(String.Empty))
-                fileBytes = File.ReadAllBytes(imgPath);
-            else
-                fileBytes = new byte[] { };
-
+            var fileBytes = !imgPath.Equals(String.Empty) ? File.ReadAllBytes(imgPath) : new byte[] { };
             var userCreate = new UserUpdate(Guid.Parse(_id), firstName, lastName, new Email(email),
                                             profession, DateTime.Parse(dayOfBirth), fileBytes);
 
@@ -182,12 +177,7 @@ namespace PatPortal.Unit.Tests.Domain.Services
             string errMsg)
         {
             //Arrange
-            byte[] fileBytes;
-            if (!imgPath.Equals(String.Empty))
-                fileBytes = File.ReadAllBytes(imgPath);
-            else
-                fileBytes = new byte[] { };
-
+            var fileBytes = !imgPath.Equals(String.Empty) ? File.ReadAllBytes(imgPath) : new byte[] { };
             var userCreate = new UserUpdate(Guid.Parse(_id), firstName, lastName, new Email(email),
                                             profession, DateTime.Parse(dayOfBirth), fileBytes);
 
@@ -211,12 +201,7 @@ namespace PatPortal.Unit.Tests.Domain.Services
             string errMsg)
         {
             //Arrange
-            byte[] fileBytes;
-            if (!imgPath.Equals(String.Empty))
-                fileBytes = File.ReadAllBytes(imgPath);
-            else
-                fileBytes = new byte[] { };
-
+            var fileBytes = !imgPath.Equals(String.Empty) ? File.ReadAllBytes(imgPath) : new byte[] { };
             var userCreate = new UserUpdate(Guid.Parse(_id), firstName, lastName, new Email("pat@onet.pl"),
                                             profession, DateTime.Parse(dayOfBirth), fileBytes);
             var user = new User(Guid.Parse(_id), firstName, lastName, new Email(email),
