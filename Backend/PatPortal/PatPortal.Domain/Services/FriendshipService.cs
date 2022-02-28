@@ -16,19 +16,22 @@ namespace PatPortal.Domain.Services
         }
         public async Task AcceptInvitationAsync(User user, User friend)
         {
-            var friendshipFromUserTask =  _friendshipRepository.GetByUserAsync(user.Id);
-            var friendshipFromFriendTask =  _friendshipRepository.GetByUserAsync(friend.Id);
+            if (user == default || friend == default)
+                throw new DomainValidationException("User or friend not found");
 
-            await Task.WhenAll(friendshipFromFriendTask, friendshipFromUserTask);
+            var friendshipFromUserTask =  _friendshipRepository.GetByUserAndFriendOrDefault(user.Id, friend.Id);
+            var friendshipFromFriendTask =  _friendshipRepository.GetByUserAndFriendOrDefault(friend.Id, user.Id);
 
-            var friendshipFromUser = friendshipFromUserTask.Result.FirstOrDefault(frs => frs.Friend.Id == friend.Id);
-            var friendshipFromFriend = friendshipFromFriendTask.Result.FirstOrDefault(frs => frs.Friend.Id == user.Id);
+            await Task.WhenAll(friendshipFromUserTask, friendshipFromFriendTask);
+
+            var friendshipFromUser = friendshipFromUserTask.Result;
+            var friendshipFromFriend = friendshipFromFriendTask.Result;
 
             if (friendshipFromFriend == default || friendshipFromUser == default)
                 throw new EntityNotFoundException("Invitation not found.");
 
             if (friendshipFromUser.UserInvited)
-                throw new DomainValidationException("User cannot accept own invitation");
+                throw new DomainValidationException("User cannot accept own invitation.");
 
             friendshipFromUser.AcceptInvitation();
             friendshipFromFriend.AcceptInvitation();
@@ -39,11 +42,14 @@ namespace PatPortal.Domain.Services
 
         public async Task<Guid> AddFriendAsync(User user, User friend)
         {
-            if (user.Id == friend.Id)
-                throw new DomainValidationException("Unable to add user to own freidns.");
-            var friendships = await _friendshipRepository.GetByUserAsync(user.Id);
+            if (user == default || friend == default)
+                throw new DomainValidationException("User or friend not found");
 
-            if (friendships.Any(frs => frs.Friend.Id == friend.Id))
+            if (user.Id == friend.Id)
+                throw new DomainValidationException("Unable to add user to own friends.");
+            var friendships = await _friendshipRepository.GetByUserAndFriendOrDefault(user.Id, friend.Id);
+
+            if (friendships != default)
                 throw new DomainValidationException("Invitation has already been sent.");
 
             var userInvitation = new Friendship(Guid.NewGuid(), user, friend, false, true);
@@ -59,15 +65,21 @@ namespace PatPortal.Domain.Services
 
         public async Task CancelIntivationAsync(User user, User friend)
         {
-            var userFriendshipsTask =  _friendshipRepository.GetByUserAsync(user.Id);
-            var friendFriendshipsTask = _friendshipRepository.GetByUserAsync(friend.Id);
+            if (user == default || friend == default)
+                throw new DomainValidationException("User or friend not found");
+
+            var userFriendshipsTask =  _friendshipRepository.GetByUserAndFriendOrDefault(user.Id, friend.Id);
+            var friendFriendshipsTask = _friendshipRepository.GetByUserAndFriendOrDefault(friend.Id, user.Id);
 
             await Task.WhenAll(userFriendshipsTask, friendFriendshipsTask);
 
-            var toDeleteUsers = userFriendshipsTask.Result.FirstOrDefault(frs => frs.Friend.Id == friend.Id);
-            var toDeleteFriend = friendFriendshipsTask.Result.FirstOrDefault(frs => frs.Friend.Id == user.Id);
+            var toDeleteUsers = userFriendshipsTask.Result;
+            var toDeleteFriend = friendFriendshipsTask.Result;
 
-            if (toDeleteFriend != default)
+            if (toDeleteFriend == default && toDeleteFriend == default)
+                throw new EntityNotFoundException("Friendship not found;");
+
+            if (toDeleteUsers != default)
                 await _friendshipRepository.DeleteAsync(toDeleteFriend);
 
             if (toDeleteFriend != default)
