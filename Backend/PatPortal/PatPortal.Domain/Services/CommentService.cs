@@ -57,8 +57,8 @@ namespace PatPortal.Domain.Services
             if (commentTask.Result == default)
                 throw new EntityNotFoundException($"Comment with id: {commentUpdate.Id} not found.");
 
-            var comment = new Comment(Guid.NewGuid(), userTask.Result, commentUpdate.Content,
-                                      DateTime.Now, DateTime.Now, postTask.Result);
+            var comment = new Comment(commentTask.Result.Id, userTask.Result, commentUpdate.Content,
+                                      commentTask.Result.AddedDate, DateTime.Now, postTask.Result);
 
             if (comment.Equals(commentTask.Result))
                 return;
@@ -75,7 +75,7 @@ namespace PatPortal.Domain.Services
         {
             var post = await _postRepository.GetOrDefaultAsync(postId);
             if (post == default)
-                throw new EntityNotFoundException($"User with id: {postId} not found.");
+                throw new EntityNotFoundException($"Post with id: {postId} not found.");
 
             return post;
         }

@@ -36,8 +36,8 @@ namespace PatPortal.Domain.Entities.Comments
             if(comment == null)
                 return false;
 
-            return comment.Id.Equals(comment.Id) && 
-                   Owner.Id.Equals(Id) && 
+            return comment.Id.Equals(Id) && 
+                   comment.Owner.Id.Equals(Owner.Id) && 
                    comment.Content.Equals(Content) && 
                    comment.Post.Id.Equals(Post.Id);
         }

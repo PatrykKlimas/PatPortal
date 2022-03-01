@@ -150,6 +150,7 @@ namespace PatPortal.Unit.Tests.Domain.Services
         #endregion
 
         #region Cancel Invitation
+
         [Test]
         public async Task CancelIvitationForNotExistingUserThrowsError()
         {
@@ -164,7 +165,42 @@ namespace PatPortal.Unit.Tests.Domain.Services
             Assert.True(ex.Message.Contains("User or friend not found", StringComparison.OrdinalIgnoreCase));
         }
 
-        //ToDo - check if method GetByUserAndFriendOrDefault - calls twice, check if Friendship not found. was throw, check if DeleteAsync calls twice
+        [Test]
+        public async Task CancelInvitationForNotExistingFriendshipThrowsError()
+        {
+            //Arrange 
+            var user = _users.ElementAt(0);
+            var friend = _users.ElementAt(1);
+            
+            _friendshipRepository.GetByUserAndFriendOrDefault(user.Id, friend.Id).Returns((Friendship)default);
+            _friendshipRepository.GetByUserAndFriendOrDefault(friend.Id, user.Id).Returns((Friendship)default);
+
+            //Act && assert
+            var ex = Assert.ThrowsAsync<EntityNotFoundException>(() => _friendshipService.CancelIntivationAsync(user, friend));
+            Assert.True(ex.Message.Contains("Friendship not found", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Test]
+        public async Task CancelinvitationForExistingFriendsipCallsProperMethods()
+        {
+            //Arrange 
+            var user = _users.ElementAt(0);
+            var friend = _users.ElementAt(1);
+            var userFriendship = _friendships.ElementAt(0);
+            var friendFriendship = _friendships.ElementAt(1);
+
+            _friendshipRepository.GetByUserAndFriendOrDefault(user.Id, friend.Id).Returns(userFriendship);
+            _friendshipRepository.GetByUserAndFriendOrDefault(friend.Id, user.Id).Returns(friendFriendship);
+
+            //Act
+            await _friendshipService.CancelIntivationAsync(user, friend);
+
+            //Assert
+            _friendshipRepository.Received(1).GetByUserAndFriendOrDefault(friend.Id, user.Id);
+            _friendshipRepository.Received(1).GetByUserAndFriendOrDefault(user.Id, friend.Id);
+            _friendshipRepository.Received(1).DeleteAsync(userFriendship);
+            _friendshipRepository.Received(1).DeleteAsync(friendFriendship);
+        }
 
         #endregion
     }

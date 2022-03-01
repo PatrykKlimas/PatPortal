@@ -390,7 +390,5 @@ namespace PatPortal.Unit.Tests.Domain.Services
         }
 
         #endregion
-
-
     }
 }

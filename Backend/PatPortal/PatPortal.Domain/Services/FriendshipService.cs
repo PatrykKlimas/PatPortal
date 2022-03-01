@@ -77,13 +77,13 @@ namespace PatPortal.Domain.Services
             var toDeleteFriend = friendFriendshipsTask.Result;
 
             if (toDeleteFriend == default && toDeleteFriend == default)
-                throw new EntityNotFoundException("Friendship not found;");
+                throw new EntityNotFoundException("Friendship not found.");
 
             if (toDeleteUsers != default)
-                await _friendshipRepository.DeleteAsync(toDeleteFriend);
+                await _friendshipRepository.DeleteAsync(toDeleteUsers);
 
             if (toDeleteFriend != default)
-                await _friendshipRepository.DeleteAsync(toDeleteUsers);
+                await _friendshipRepository.DeleteAsync(toDeleteFriend);
         }
     }
 }
