@@ -24,7 +24,8 @@ namespace PatPortal.Identity.Controllers
         public async Task<ActionResult<string>> Login([FromBody] UserLoginDto userLogin)
         {
             //intreduce custom exceptions!
-            return Ok(await _mediator.Send(new LoginCommand(userLogin)));
+            var token = await _mediator.Send(new LoginCommand(userLogin));
+            return Ok(token);
         }
 
     }

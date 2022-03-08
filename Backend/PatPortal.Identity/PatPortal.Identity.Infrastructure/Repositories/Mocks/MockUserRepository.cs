@@ -2,11 +2,6 @@
 using PatPortal.Identity.Domain.Enums;
 using PatPortal.Identity.Domain.Repositories;
 using PatPortal.Identity.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
 {
@@ -39,14 +34,17 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
             }
             };
         }
-        public Task<User> GetByEmailOrDefaultsync(string userName)
+
+        public async Task<User> GetByEmailOrDefaultsync(string email)
         {
-            throw new NotImplementedException();
+            var user = _users.FirstOrDefault(u => u.Email.ToString().ToLower().Equals(email.ToLower()));
+            return await Task.FromResult(user);
         }
 
-        public Task<User> GetByUserNameOrDefaultAsync(string userName)
+        public async Task<User> GetByUserNameOrDefaultAsync(string userName)
         {
-            throw new NotImplementedException();
+            var user = _users.FirstOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower()));
+            return await Task.FromResult(user);
         }
     }
 }

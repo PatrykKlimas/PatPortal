@@ -1,20 +1,19 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using PatPortal.Identity.Domain.Entities.Request;
+﻿using PatPortal.Identity.Domain.Entities.Request;
 using PatPortal.Identity.Domain.Repositories;
 using PatPortal.Identity.Domain.Services.Interfaces;
-using System.Security.Cryptography;
-using System.Text;
-using System;
+using PatPortal.Identity.SharedKernel;
 
 namespace PatPortal.Identity.Domain.Services
 {
     public class LoginService : ILoginService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IIdentityProvider _identityProvider;
 
-        public LoginService(IUserRepository userRepository)
+        public LoginService(IUserRepository userRepository, IIdentityProvider identityProvider)
         {
             _userRepository = userRepository;
+            _identityProvider = identityProvider;
         }
         public async Task<string> Login(UserLogin userLogin)
         {
@@ -27,25 +26,18 @@ namespace PatPortal.Identity.Domain.Services
             if(user == default)
                 throw new NotImplementedException();
 
+            var password = userLogin.Password.Hashe();
+
+            Autenticate(password , user.Password);
+            var token = _identityProvider.GenerateToken(user);
 
             throw new NotImplementedException();
         }
 
         private void Autenticate(string givenPassword, string currentPassword)
         {
-            byte[] salt = new byte[128 / 8];
-            using (var rngCsp = new RSACryptoServiceProvider())
-            {
-                rngCsp.GetNonZeroBytes(salt);
-            }
-
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: givenPassword,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8));
+            if (!givenPassword.Equals(currentPassword))
+                throw new UnauthorizedAccessException();//ToDo throw custom exception
         }
     }
 }

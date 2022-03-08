@@ -1,7 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PatPortal.Identity.Application.Configuration;
+using PatPortal.Identity.Domain.Repositories;
+using PatPortal.Identity.Domain.Services;
+using PatPortal.Identity.Domain.Services.Interfaces;
 using PatPortal.Identity.Infrastructure.Configuration;
+using PatPortal.Identity.Infrastructure.Prividers;
+using PatPortal.Identity.Infrastructure.Repositories.Mocks;
 using System.Reflection;
 using System.Text;
 
@@ -32,7 +38,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddScoped<IIdentityProvider>(provider => new IdentityProvider(settings));
+builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddTransient<IUserRepository, MockUserRepository>();
+
+//Register MediatR & Mapper
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace PatPortal.Identity.Domain.Repositories
 {
-    public interface IUserRepository
+    public interface IIdentityProvider
     {
-        Task<User> GetByUserNameOrDefaultAsync(string userName);
-        Task<User> GetByEmailOrDefaultsync(string email);
+        string GenerateToken(User user);
     }
 }
