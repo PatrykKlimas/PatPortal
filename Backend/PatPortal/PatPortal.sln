@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatPortal.Integration.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatPortal.SharedKernel", "PatPortal.SharedKernel\PatPortal.SharedKernel.csproj", "{58D846BB-8BFB-4F2D-A41E-D250EB1FE9FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatPortal.Unit.Tests", "PatPortal.SharedKernel.Tests\PatPortal.Unit.Tests.csproj", "{862C98D1-E1A1-4469-BA7E-E584BA2E477F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatPortal.Unit.Tests", "PatPortal.Unit.Tests\PatPortal.Unit.Tests.csproj", "{862C98D1-E1A1-4469-BA7E-E584BA2E477F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

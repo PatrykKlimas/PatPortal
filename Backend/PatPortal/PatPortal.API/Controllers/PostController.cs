@@ -21,7 +21,7 @@ namespace PatPortal.API.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreatePost([FromBody] PostForCreationDto postToCreate)
         {
-            return await ExecuteResult<CreatePostsCommand, string>(new CreatePostsCommand(postToCreate));
+            return await ExecuteResult<CreatePostsCommand, string>(new CreatePostsCommand(postToCreate), HttpMethod.Post);
         }
 
         [HttpPatch("{id}")]
@@ -33,19 +33,19 @@ namespace PatPortal.API.Controllers
         [HttpGet("{userId}/{requestorId}")]
         public async Task<ActionResult<IEnumerable<PostForViewDto>>> GetByUser(string userId, string requestorId)
         {
-            return await ExecuteResult<GetPostsByUserQuerry, IEnumerable<PostForViewDto>>(new GetPostsByUserQuerry(userId, requestorId));
+            return await ExecuteResult<GetPostsByUserQuerry, IEnumerable<PostForViewDto>>(new GetPostsByUserQuerry(userId, requestorId), HttpMethod.Get);
         }
 
         [HttpGet("{requestorId}")]
         public async Task<ActionResult<IEnumerable<PostForViewDto>>> GetForUserToSee(string requestorId)
         {
-            return await ExecuteResult<GetPostsForUserToSeeQuerry, IEnumerable<PostForViewDto>>(new GetPostsForUserToSeeQuerry(requestorId));
+            return await ExecuteResult<GetPostsForUserToSeeQuerry, IEnumerable<PostForViewDto>>(new GetPostsForUserToSeeQuerry(requestorId), HttpMethod.Get);
         }
 
         [HttpGet("{postId}/comments")]
         public async Task<ActionResult<IEnumerable<CommentForViewDto>>> GetComments(string postId)
         {
-            return await ExecuteResult<GetPostCommentsQuerry, IEnumerable<CommentForViewDto>>(new GetPostCommentsQuerry(postId));
+            return await ExecuteResult<GetPostCommentsQuerry, IEnumerable<CommentForViewDto>>(new GetPostCommentsQuerry(postId), HttpMethod.Get);
         }
 
 
