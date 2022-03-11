@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace PatPortal.API.Controllers
+﻿namespace PatPortal.Identity.Controllers
 {
-    public abstract class AppControllerBase<TController> : ControllerBase 
+    using MediatR;
+    using Microsoft.AspNetCore.Mvc;
+
+    public abstract class AppControllerBase<TController> : ControllerBase
     {
         protected readonly ILogger<TController> _logger;
         protected readonly IMediator _mediator;
@@ -14,22 +14,23 @@ namespace PatPortal.API.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ActionResult<TResult>> ExecuteResult<TQuerry, TResult>(TQuerry request, HttpMethod method) 
+        public async Task<ActionResult<TResult>> ExecuteResult<TQuerry, TResult>(TQuerry request, HttpMethod method)
             where TQuerry : IRequest<TResult>
         {
             var result = await _mediator.Send(request);
 
             if (method == HttpMethod.Post)
                 return Created("Created", result);
-
-            return Ok(result);
+            
+            return Ok(result); 
         }
 
         public async Task<ActionResult> ExecuteResult<TQuerry>(TQuerry request)
             where TQuerry : IRequest
         {
             await _mediator.Send(request);
-            return Ok();
+            return NoContent();
         }
     }
 }
+

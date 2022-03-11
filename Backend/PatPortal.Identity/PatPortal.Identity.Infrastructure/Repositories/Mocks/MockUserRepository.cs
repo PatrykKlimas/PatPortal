@@ -11,6 +11,7 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
 
         public MockUserRepository()
         {
+            //"8Pw7aDRPvN44Y5k58k9dJlW5KLIL7oxCL5Hb8UN3+dmSVRle3oN20todPlvOWzTXQzHSz8WzIC4iyVUlHB+p3W73C4d3rw=="
             _users = new List<User>(){
                 new User()
             {
@@ -19,7 +20,7 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
                 Email = new Email("dawid@o2.pl"),
                 FirstName = "Dawid",
                 LastName = "Kowalski",
-                Password = "xxxyyyzzz",
+                Password = "H3sXtFKYnUQREERFtcuMmtQ0VtG67JLvEk9VvwOB4Oxq5+vlcn4iUhdTbE9slsTXSiydSBkQ/ktdd7BqkuRW9l8ZQCCcHA==", //"xxxyyyzzz"
                 Role = Role.User
             },
                 new User()
@@ -29,7 +30,7 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
                 Email = new Email("dawid@o2.pl"),
                 FirstName = "Dawid",
                 LastName = "Kowalski",
-                Password = "xxxyyyzzz",
+                Password = "H3sXtFKYnUQREERFtcuMmtQ0VtG67JLvEk9VvwOB4Oxq5+vlcn4iUhdTbE9slsTXSiydSBkQ/ktdd7BqkuRW9l8ZQCCcHA==", //"xxxyyyzzz"
                 Role = Role.Admin
             }
             };

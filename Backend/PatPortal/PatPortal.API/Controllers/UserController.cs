@@ -20,33 +20,33 @@ namespace PatPortal.API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<UserForViewDto>> GetAsync(string id)
         {
-            return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(id));
+            return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(id), HttpMethod.Get);
         }
 
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<string>> CreateAsync([FromBody] UserForCreationDto user)
         {
-            return await ExecuteResult<CreateUserCommand, string>(new CreateUserCommand(user));
+            return await ExecuteResult<CreateUserCommand, string>(new CreateUserCommand(user), HttpMethod.Post);
         }
 
         [HttpGet]
         [Route("{id}/friends")]
         public async Task<ActionResult<IEnumerable<UserForViewDto>>> GetFriends(string id)
         {
-            return await ExecuteResult<GetFriendsQuerry, IEnumerable<UserForViewDto>>(new GetFriendsQuerry(id));
+            return await ExecuteResult<GetFriendsQuerry, IEnumerable<UserForViewDto>>(new GetFriendsQuerry(id), HttpMethod.Get);
         }
         [HttpGet]
         [Route("{id}/invitations")]
         public async Task<ActionResult<IEnumerable<UserForViewDto>>> GetInvitations(string id)
         {
-            return await ExecuteResult<GetInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetInvitationsQuerry(id));
+            return await ExecuteResult<GetInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetInvitationsQuerry(id), HttpMethod.Get);
         }
         [HttpGet]
         [Route("{id}/sentInvitations")]
         public async Task<ActionResult<IEnumerable<UserForViewDto>>> GetSentInvitations(string id)
         {
-            return await ExecuteResult<GetSentInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetSentInvitationsQuerry(id));
+            return await ExecuteResult<GetSentInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetSentInvitationsQuerry(id), HttpMethod.Get);
         }
 
         [HttpPatch]

@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PatPortal.Identity.Application.Configuration;
+using PatPortal.Identity.CustomMiddlewere;
 using PatPortal.Identity.Domain.Repositories;
 using PatPortal.Identity.Domain.Services;
 using PatPortal.Identity.Domain.Services.Interfaces;
@@ -53,6 +54,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ApiErrorHandler>();
 
 app.UseHttpsRedirection();
 

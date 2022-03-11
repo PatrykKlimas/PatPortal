@@ -5,26 +5,34 @@ namespace PatPortal.Identity.SharedKernel
 {
     public static class StringExtension
     {
-        public static string Hashe(this string value)
+        public static string Hashe(this string value, string salt = "")
         {
-            //Source:
-            //https://docs.microsoft.com/pl-pl/aspnet/core/security/data-protection/consumer-apis/password-hashing?view=aspnetcore-6.0
-            // generate a 128-bit salt using a cryptographically strong random sequence of nonzero values
-            byte[] salt = new byte[128 / 8];
-            using (var rngCsp = new RNGCryptoServiceProvider())
-            {
-                rngCsp.GetNonZeroBytes(salt);
-            }
-
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: value,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8));
+            salt = salt == "" ? GenerateSalt(70) : salt;
+            string hashed = HashPassword(value, salt, 10101, 70);
 
             return hashed;
+        }
+
+        private static string GenerateSalt(int nSalt)
+        {
+            var saltBytes = new byte[nSalt];
+
+            using (var provider = new RNGCryptoServiceProvider())
+            {
+                provider.GetNonZeroBytes(saltBytes);
+            }
+
+            return Convert.ToBase64String(saltBytes);
+        }
+
+        private static string HashPassword(string password, string salt, int nIterations, int nHash)
+        {
+            var saltBytes = Convert.FromBase64String(salt);
+
+            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, nIterations))
+            {
+                return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(nHash));
+            }
         }
     }
 }

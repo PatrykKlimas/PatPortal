@@ -8,24 +8,18 @@ namespace PatPortal.Identity.Controllers
 {
     [ApiController]
     [Route("api/login")]
-    public class LoginController : ControllerBase
+    public class LoginController : AppControllerBase<LoginController>
     {
-        private readonly ILogger<LoginController> _logger;
-        private readonly IMediator _mediator;
-
-        public LoginController(ILogger<LoginController> logger, IMediator mediator)
+        public LoginController(ILogger<LoginController> logger, IMediator mediator) 
+            : base(logger, mediator)
         {
-            _logger = logger;
-            _mediator = mediator;
         }
 
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] UserLoginDto userLogin)
         {
-            //intreduce custom exceptions!
-            var token = await _mediator.Send(new LoginCommand(userLogin));
-            return Ok(token);
+            return await ExecuteResult<LoginCommand, string>(new LoginCommand(userLogin), HttpMethod.Post);
         }
 
     }
