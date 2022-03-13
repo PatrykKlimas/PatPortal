@@ -2,6 +2,7 @@
 using PatPortal.Identity.Domain.Entities;
 using PatPortal.Identity.Domain.Repositories;
 using PatPortal.Identity.Infrastructure.Configuration;
+using PatPortal.Identity.SharedKernel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -43,6 +44,12 @@ namespace PatPortal.Identity.Infrastructure.Prividers
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public bool Autenticate(string givenPassword, string currentPasswor)
+        {
+            var password = givenPassword.Hashe(_applicationConfiguration.PasswordConfig.HashingKey);
+            return password.Equals(currentPasswor);
         }
     }
 }

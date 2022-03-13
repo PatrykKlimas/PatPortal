@@ -19,7 +19,7 @@ namespace PatPortal.Identity.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] UserLoginDto userLogin)
         {
-            return await ExecuteResult<LoginCommand, string>(new LoginCommand(userLogin), HttpMethod.Post);
+            return await ExecuteResult<LoginCommand, string>(new LoginCommand(userLogin));
         }
 
     }

@@ -14,12 +14,13 @@
             _mediator = mediator;
         }
 
-        public async Task<ActionResult<TResult>> ExecuteResult<TQuerry, TResult>(TQuerry request, HttpMethod method)
+        public async Task<ActionResult<TResult>> ExecuteResult<TQuerry, TResult>(TQuerry request)
             where TQuerry : IRequest<TResult>
         {
             var result = await _mediator.Send(request);
+            var httpMethod = HttpContext.Request.Method;
 
-            if (method == HttpMethod.Post)
+            if (httpMethod.Equals(HttpMethod.Post.Method))
                 return Created("Created", result);
             
             return Ok(result); 

@@ -28,12 +28,14 @@ namespace PatPortal.Identity.Domain.Services
             if(user == default)
                 throw new NotImplementedException();
 
-            var password = userLogin.Password.Hashe("8Pw7aDRPvN44Y5k58k9dJlW5KLIL7oxCL5Hb8UN3+dmSVRle3oN20todPlvOWzTXQzHSz8WzIC4iyVUlHB+p3W73C4d3rw==");
-            //think how to save salt :) 
-            Autenticate(password , user.Password);
+            var autenticationResult = _identityProvider.Autenticate(userLogin.Password, user.Password);
+
+            if(!autenticationResult)
+                throw new UnauthorizedException("Invalid password.");
+
             var token = _identityProvider.GenerateToken(user);
 
-            throw new NotImplementedException();
+            return token;
         }
 
         private void Autenticate(string givenPassword, string currentPassword)

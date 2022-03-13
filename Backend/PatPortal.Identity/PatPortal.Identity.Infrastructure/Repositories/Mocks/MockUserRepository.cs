@@ -16,9 +16,9 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
                 new User()
             {
                 Id = Guid.NewGuid(),
-                UserName = "Dawid12345",
-                Email = new Email("dawid@o2.pl"),
-                FirstName = "Dawid",
+                UserName = "Patryk12345",
+                Email = new Email("patryk@o2.pl"),
+                FirstName = "Patryk",
                 LastName = "Kowalski",
                 Password = "H3sXtFKYnUQREERFtcuMmtQ0VtG67JLvEk9VvwOB4Oxq5+vlcn4iUhdTbE9slsTXSiydSBkQ/ktdd7BqkuRW9l8ZQCCcHA==", //"xxxyyyzzz"
                 Role = Role.User

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace PatPortal.Identity.Infrastructure.Configuration
 {
-    public class ApplicationConfiguration
+    public class PasswordConfig
     {
-        public JwtConfig JwtConfig { get; set; }
-        public PasswordConfig PasswordConfig { get; set; }
+        public string HashingKey { get; set; }
     }
 }

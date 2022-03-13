@@ -10,5 +10,6 @@ namespace PatPortal.Identity.Domain.Repositories
     public interface IIdentityProvider
     {
         string GenerateToken(User user);
+        bool Autenticate(string givenPassword, string currentPasswor);
     }
 }
