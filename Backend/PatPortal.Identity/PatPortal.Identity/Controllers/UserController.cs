@@ -1,74 +1,43 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PatPortal.Identity.Domain.Entities;
-using PatPortal.Identity.Domain.Enums;
+using PatPortal.Identity.Application.Contracts.Commands;
+using PatPortal.Identity.Application.Contracts.Querries;
+using PatPortal.Identity.Application.DTOs.Request;
+using PatPortal.Identity.Application.DTOs.Response;
 using System.Security.Claims;
 
 namespace PatPortal.Identity.Controllers
 {
     [ApiController]
-    [Route("api/login")]
+    [Route("api/user")]
     public class UserController : AppControllerBase<UserController>
     {
-        public UserController(ILogger<UserController> logger, IMediator mediator) 
+        public UserController(ILogger<UserController> logger, IMediator mediator)
             : base(logger, mediator)
         {
         }
 
-        [HttpGet("Public")]
-        public ActionResult<string> Public()
+        [HttpPost("create")]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> CreateUser([FromBody] UserForCreationDto user)
         {
-            return Ok("Public property");
-        }
-        
-        [HttpGet("ForAdmin")]
-        [Authorize(Roles = "Admin")]
-        public ActionResult AdminEndpoint()
-        {
-            var currentUser = GetCurrentUser();
-            return Ok($"Current user {currentUser.FirstName}. You are admin.");
+            return await ExecuteResult<CreateUserCommand, string>(new CreateUserCommand(user));
         }
 
-        [HttpGet("ForUser")]
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserCredentialsDto>> Login([FromBody] UserLoginDto userLogin)
+        {
+            return await ExecuteResult<LoginCommand, UserCredentialsDto>(new LoginCommand(userLogin));
+        }
+
+        [HttpGet]
         [Authorize(Roles = "User")]
-        public ActionResult UserEndpoint()
+        public async Task<ActionResult<UserForViewDto>> Get()
         {
-            var currentUser = GetCurrentUser();
-            return Ok($"Current user {currentUser.FirstName}. You are user.");
-        }
-
-        [HttpGet("ForUserAndAdmin")]
-        [Authorize(Roles = "User,Admin")]
-        public ActionResult UserAndAdminEndpoint()
-        {
-            var currentUser = GetCurrentUser();
-            return Ok($"Current user {currentUser.FirstName}. You are admin or admin.");
-        }
-
-        private User GetCurrentUser()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var method = HttpContext.Request.Method;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                var cliamrole = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
-
-                var role = Enum.Parse<Role>(cliamrole);
-
-                return new User()
-                {
-                    UserName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = new Domain.ValueObjects.Email(userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value),
-                    FirstName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Surname)?.Value,
-                    Role = role
-                };
-            }
-
-            return null;
+            var claims = HttpContext.User.Identity as ClaimsIdentity;
+            return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(claims));
         }
     }
 }

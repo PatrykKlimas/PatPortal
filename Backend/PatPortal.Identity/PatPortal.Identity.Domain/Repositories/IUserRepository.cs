@@ -11,5 +11,7 @@ namespace PatPortal.Identity.Domain.Repositories
     {
         Task<User> GetByUserNameOrDefaultAsync(string userName);
         Task<User> GetByEmailOrDefaultsync(string email);
+        Task<User> GetByGlobalIdOrDefaultsync(Guid globalId);
+        Task<User> AddAsync(User user);
     }
 }

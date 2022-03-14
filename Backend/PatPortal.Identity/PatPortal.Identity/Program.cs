@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -10,13 +9,22 @@ using PatPortal.Identity.Domain.Services.Interfaces;
 using PatPortal.Identity.Infrastructure.Configuration;
 using PatPortal.Identity.Infrastructure.Prividers;
 using PatPortal.Identity.Infrastructure.Repositories.Mocks;
-using System.Reflection;
+using FluentValidation.AspNetCore;
 using System.Text;
+using FluentValidation;
+using PatPortal.Identity.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using PatPortal.Identity.Domain.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(fv =>
+    {
+        fv.AutomaticValidationEnabled = false;
+        fv.LocalizationEnabled = false;
+    });   
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -61,8 +69,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddScoped<IIdentityProvider>(provider => new IdentityProvider(settings));
-builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, MockUserRepository>();
+builder.Services.AddTransient<IValidator<User>, UserValidator>();
 
 //Register MediatR & Mapper
 builder.Services.AddApplication();

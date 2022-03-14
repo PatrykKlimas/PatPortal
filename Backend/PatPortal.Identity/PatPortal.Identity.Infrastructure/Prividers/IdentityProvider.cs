@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using PatPortal.Identity.Domain.Entities;
 using PatPortal.Identity.Domain.Repositories;
+using PatPortal.Identity.Domain.ValueObjects;
 using PatPortal.Identity.Infrastructure.Configuration;
 using PatPortal.Identity.SharedKernel;
 using System.IdentityModel.Tokens.Jwt;
@@ -50,6 +51,17 @@ namespace PatPortal.Identity.Infrastructure.Prividers
         {
             var password = givenPassword.Hashe(_applicationConfiguration.PasswordConfig.HashingKey);
             return password.Equals(currentPasswor);
+        }
+
+        public string GetEmailOrDefault(ClaimsIdentity claims)
+        {
+            if (claims == default)
+                return default;
+
+            var userClaims = claims.Claims;
+            var email = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.Email)?.Value;
+
+            return email;
         }
     }
 }

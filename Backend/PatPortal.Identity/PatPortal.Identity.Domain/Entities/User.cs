@@ -6,12 +6,31 @@ namespace PatPortal.Identity.Domain.Entities
 {
     public class User : Entity
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public Email Email { get; set; }
-        public Role Role { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-
+        public User(
+            Guid id, 
+            string userName, 
+            string password, 
+            Email email, 
+            Role role, 
+            string firstName, 
+            string lastName, 
+            Guid globalId)
+            : base(id)
+        {
+            UserName = userName;
+            Password = password;
+            Email = email;
+            Role = role;
+            FirstName = firstName;
+            LastName = lastName;
+            GlobalId = globalId;
+        }
+        public string UserName { get; }
+        public string Password { get; }
+        public Email Email { get; }
+        public Role Role { get; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public Guid GlobalId { get; }
     }
 }
