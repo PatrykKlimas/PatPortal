@@ -17,10 +17,15 @@ namespace PatPortal.Identity.Domain.Validators
                 .NotNull()
                 .WithMessage("Password cannot be null")
                 .Length(6, 20)
-                .WithMessage("Password must be between 6 and 20 characters.");
-                //TODO - check password
-                //.Matches("/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$/")
-                //.WithMessage("Must have atleast 1 uppercase, 1 lowercase letter and 1 number");
+                .WithMessage("Password must be between 6 and 20 characters.")
+                .Matches("[0-9]")
+                .WithMessage("Password must contain at least one number")
+                .Matches("[a-z]")
+                .WithMessage("Password must contain at least one lower letter")
+                .Matches("[A-Z]")
+                .WithMessage("Password must contain at least one upper letter")
+                .Matches(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]")
+                .WithMessage("Password must contain at least one special character");
 
             RuleFor(user => user.Email.ToString())
                 .NotNull()

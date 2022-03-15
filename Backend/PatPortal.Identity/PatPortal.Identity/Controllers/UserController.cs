@@ -39,5 +39,11 @@ namespace PatPortal.Identity.Controllers
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(claims));
         }
+
+        [HttpDelete]
+        [AcceptVerbs(Route = 'user']
+        public async Task<ActionResult>
+            
+            
     }
 }
