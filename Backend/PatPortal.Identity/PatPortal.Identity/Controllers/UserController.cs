@@ -18,31 +18,34 @@ namespace PatPortal.Identity.Controllers
         {
         }
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> CreateUser([FromBody] UserForCreationDto user)
+        public async Task<ActionResult<string>> CreateUserAsync([FromBody] UserForCreationDto user)
         {
             return await ExecuteResult<CreateUserCommand, string>(new CreateUserCommand(user));
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserCredentialsDto>> Login([FromBody] UserLoginDto userLogin)
+        public async Task<ActionResult<UserCredentialsDto>> LoginAsync([FromBody] UserLoginDto userLogin)
         {
             return await ExecuteResult<LoginCommand, UserCredentialsDto>(new LoginCommand(userLogin));
         }
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public async Task<ActionResult<UserForViewDto>> Get()
+        public async Task<ActionResult<UserForViewDto>> GetAsync()
         {
             var claims = HttpContext.User.Identity as ClaimsIdentity;
             return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(claims));
         }
 
         [HttpDelete]
-        [AcceptVerbs(Route = 'user']
-        public async Task<ActionResult>
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DeleteAsync(string userId)
+        {
+            return await ExecuteResult<DeleteUserCommand>(new DeleteUserCommand(userId));
+        }
             
             
     }

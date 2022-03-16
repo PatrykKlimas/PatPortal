@@ -61,7 +61,18 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
                     password:      "H3sXtFKYnUQREERFtcuMmtQ0VtG67JLvEk9VvwOB4Oxq5+vlcn4iUhdTbE9slsTXSiydSBkQ/ktdd7BqkuRW9l8ZQCCcHA==", //"xxxyyyzzz"
                     role:          Role.User,
                     globalId:      Guid.Parse("ca23fd70-7928-478c-8349-299f43ba54bc")
-            ) };
+            ),
+                new User(
+                    id:            Guid.NewGuid(),
+                    userName:      "Admin",
+                    email:         new Email("admin@o2.com"),
+                    firstName:     "Admin",
+                    lastName:      "Admin",
+                    password:      "H3sXtFKYnUQREERFtcuMmtQ0VtG67JLvEk9VvwOB4Oxq5+vlcn4iUhdTbE9slsTXSiydSBkQ/ktdd7BqkuRW9l8ZQCCcHA==", //"xxxyyyzzz"
+                    role:          Role.Admin,
+                    globalId:      Guid.Parse("d9865a7d-becd-4e32-ab04-c3e8a1e38aec")
+                    )
+            };
         }
 
         public async Task<User> AddAsync(User user)
@@ -91,6 +102,14 @@ namespace PatPortal.Identity.Infrastructure.Repositories.Mocks
         {
             var user = _users.FirstOrDefault(u => u.UserName.ToLower().Equals(userName.ToLower()));
             return await Task.FromResult(user);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var newUsers = _users.Where(user => !user.Id.Equals(id)).ToList();
+            _users = newUsers;
+
+            await Task.FromResult(_users);
         }
     }
 }

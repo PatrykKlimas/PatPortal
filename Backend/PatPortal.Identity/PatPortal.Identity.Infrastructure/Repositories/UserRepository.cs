@@ -15,6 +15,11 @@ namespace PatPortal.Identity.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public Task DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<User> GetByEmailOrDefaultsync(string email)
         {
             throw new NotImplementedException();
