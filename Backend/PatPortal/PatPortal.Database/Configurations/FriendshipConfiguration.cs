@@ -15,10 +15,10 @@ namespace PatPortal.Database.Configurations
                 .HasForeignKey(friendship => friendship.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(friendship => friendship.Friend)
-                .WithMany(user => user.Friendships)
-                .HasForeignKey(friendship => friendship.FriendId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(friendship => friendship.Friend)
+            //    .WithMany(user => user.Friendships)
+            //    .HasForeignKey(friendship => friendship.FriendId)
+            //    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

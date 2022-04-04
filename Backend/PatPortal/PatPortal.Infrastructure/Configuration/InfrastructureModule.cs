@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PatPortal.Database;
 using PatPortal.Domain.Repositories.Interfaces;
+using PatPortal.Infrastructure.Factories;
 using PatPortal.Infrastructure.Repositories;
 using PatPortal.Infrastructure.Repositories.Mock;
 
@@ -19,6 +20,14 @@ namespace PatPortal.Infrastructure.Configuration
         {
             LoadRepositories(builder);
             LoadDatabase(builder);
+            LoadFactories(builder);
+        }
+
+        private void LoadFactories(ContainerBuilder builder)
+        {
+            builder.RegisterType<UserFactory>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
 
         private void LoadDatabase(ContainerBuilder builder)
@@ -65,7 +74,7 @@ namespace PatPortal.Infrastructure.Configuration
                     .InstancePerLifetimeScope();
 
                 builder.RegisterType<FriendshipRepository>()
-                    .As<IUserRepository>()
+                    .As<IFriendshipRepository>()
                     .InstancePerLifetimeScope();
 
                 builder.RegisterType<CommentRepository>()

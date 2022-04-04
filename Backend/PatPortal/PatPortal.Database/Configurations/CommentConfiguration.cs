@@ -10,6 +10,9 @@ namespace PatPortal.Database.Configurations
         {
             builder.HasKey(comment => comment.Id);
 
+            builder.Property(comment => comment.Content)
+                .HasMaxLength(500);
+
             builder.HasOne(comment => comment.Owner)
                 .WithMany(user => user.Comments)
                 .HasForeignKey(comment => comment.OwnerId)

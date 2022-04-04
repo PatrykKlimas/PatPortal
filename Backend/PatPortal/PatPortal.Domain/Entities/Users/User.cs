@@ -7,7 +7,7 @@ namespace PatPortal.Domain.Entities.Users
     public class User : UserBase
     {
         public byte[] Photo { get; private set; }
-        public string Profession { get; set; }
+        public string Profession { get; private set; }
 
         public User(
             Guid id,

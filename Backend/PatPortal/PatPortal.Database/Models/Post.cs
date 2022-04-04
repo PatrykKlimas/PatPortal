@@ -13,6 +13,6 @@ namespace PatPortal.Database.Models
         public User Owner { get; set; }
         public Guid OwnerId { get; set; }
         public bool IsDeleted { get; set; } //Applying soft delete
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }

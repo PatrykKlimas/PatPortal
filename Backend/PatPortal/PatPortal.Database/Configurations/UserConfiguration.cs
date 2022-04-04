@@ -10,6 +10,15 @@ namespace PatPortal.Database.Configurations
         {
             builder.HasKey(user => user.Id);
 
+            builder.Property(user => user.FirstName)
+                .HasMaxLength(40);
+
+            builder.Property(user => user.LastName)
+                .HasMaxLength(40);
+
+            builder.Property(user => user.Profession)
+                .HasMaxLength(40);
+
             builder.HasMany(user => user.Posts)
                 .WithOne(post => post.Owner)
                 .OnDelete(DeleteBehavior.NoAction);

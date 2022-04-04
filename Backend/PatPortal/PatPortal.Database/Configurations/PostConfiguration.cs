@@ -10,6 +10,9 @@ namespace PatPortal.Database.Configurations
         {
             builder.HasKey(post => post.Id);
 
+            builder.Property(post => post.Content)
+                .HasMaxLength(500);
+
             builder.HasMany(post => post.Comments)
                 .WithOne(comment => comment.Post)
                 .OnDelete(DeleteBehavior.NoAction);
