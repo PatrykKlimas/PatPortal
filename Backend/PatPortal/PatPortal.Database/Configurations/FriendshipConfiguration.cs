@@ -8,6 +8,8 @@ namespace PatPortal.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Friendship> builder)
         {
+            builder.HasKey(friendship => friendship.Id);
+
             builder.HasOne(friendship => friendship.User)
                 .WithMany(user => user.Friendships)
                 .HasForeignKey(friendship => friendship.UserId)

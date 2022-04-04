@@ -1,12 +1,9 @@
 ﻿using Autofac;
+using Microsoft.EntityFrameworkCore;
+using PatPortal.Database;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Infrastructure.Repositories;
 using PatPortal.Infrastructure.Repositories.Mock;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PatPortal.Infrastructure.Configuration
 {
@@ -21,6 +18,24 @@ namespace PatPortal.Infrastructure.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             LoadRepositories(builder);
+            LoadDatabase(builder);
+        }
+
+        private void LoadDatabase(ContainerBuilder builder)
+        {
+            builder.Register(c =>
+            {
+                var options = new DbContextOptionsBuilder<PatPortalDbContext>();
+                options.UseSqlServer(_settings.ConnectionStrings.PatPortalDataBase, optionsBuilder =>
+                {
+                    optionsBuilder.EnableRetryOnFailure(
+                        maxRetryCount: 10,
+                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null);
+                });
+
+                return new PatPortalDbContext(options.Options);
+            }).AsSelf().InstancePerLifetimeScope();
         }
 
         private void LoadRepositories(ContainerBuilder builder)

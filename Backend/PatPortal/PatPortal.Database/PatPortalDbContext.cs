@@ -10,6 +10,10 @@ namespace PatPortal.Database
         public virtual DbSet<Friendship> Friendships { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
+        public PatPortalDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());

@@ -8,6 +8,8 @@ namespace PatPortal.Database.Configurations
     {
         public void Configure(EntityTypeBuilder<Post> builder)
         {
+            builder.HasKey(post => post.Id);
+
             builder.HasMany(post => post.Comments)
                 .WithOne(comment => comment.Post)
                 .OnDelete(DeleteBehavior.NoAction);
