@@ -25,13 +25,13 @@ namespace PatPortal.Domain.Services
 
         public async Task<Guid> CreateAsync(UserCreate userForCreate)
         {
-            var usersTask = _userRepository.GetAllAsync();
+            var userTask = _userRepository.GetOrDefaultByEmailAsync(userForCreate.Email);
             var validationResult = await _userValidatorFactory.Validate(userForCreate);
 
             if (!validationResult.IsValid)
                 throw new CustomValidationnException(validationResult);
 
-            if ((await usersTask).Any(user => user.Email.Equals(userForCreate.Email)))
+            if ((await userTask) is not null)
                 throw new DomainValidationException($"User with email: {userForCreate.Email} already exists.");
 
             var newUser = new User(

@@ -87,9 +87,9 @@ namespace PatPortal.Unit.Tests.Domain.Services
             string errMsg)
         {
             //Arrange
-            _userRepository.GetAllAsync().Returns(new List<User> {
+            _userRepository.GetOrDefaultByEmailAsync(new Email(email)).Returns(
                 new User(Guid.Parse(_id), firstName, lastName, new Email(email), "" ,DateTime.Parse(dayOfBirth), new byte[] { })
-            });
+            );
 
             var userCreate = new UserCreate(Guid.Parse(_id), firstName, lastName, new Email(email), DateTime.Parse(dayOfBirth));
 

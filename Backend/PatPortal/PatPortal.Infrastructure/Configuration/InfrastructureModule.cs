@@ -25,7 +25,7 @@ namespace PatPortal.Infrastructure.Configuration
 
         private void LoadFactories(ContainerBuilder builder)
         {
-            builder.RegisterType<UserFactory>()
+            builder.RegisterType<UserMapper>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }

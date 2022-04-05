@@ -13,11 +13,6 @@ namespace PatPortal.Infrastructure.Repositories.Mock
             _users = MockDataProvider.MockUsers();
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
-        {
-            return await Task.FromResult(_users);
-        }
-
         public async Task<User> GetOrDefaultAsync(Guid Id)
         {
             var user = _users.Where(user => user.Id == Id).FirstOrDefault();

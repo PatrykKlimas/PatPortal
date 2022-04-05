@@ -5,7 +5,7 @@ using UserEntity = PatPortal.Domain.Entities.Users.User;
 
 namespace PatPortal.Infrastructure.Factories
 {
-    internal class UserFactory : IUserFactory
+    internal class UserMapper : IUserMapper
     {
         public UserDb Create(UserEntity user)
         {
