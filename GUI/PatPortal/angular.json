@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Pat-Portal": {
+    "PatPortal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "pm",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -27,8 +27,6 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -70,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Pat-Portal:build:production"
+              "browserTarget": "PatPortal:build:production"
             },
             "development": {
-              "browserTarget": "Pat-Portal:build:development"
+              "browserTarget": "PatPortal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Pat-Portal:build"
+            "browserTarget": "PatPortal:build"
           }
         },
         "test": {
@@ -96,7 +94,6 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -105,5 +102,5 @@
       }
     }
   },
-  "defaultProject": "Pat-Portal"
+  "defaultProject": "PatPortal"
 }

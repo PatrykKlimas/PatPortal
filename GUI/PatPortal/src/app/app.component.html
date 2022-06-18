@@ -1,0 +1,12 @@
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <a class="navbar-brand">{{title}}</a>
+  <div *ngIf="user$ | async as user">
+    <div class="row">{{user.Id}}</div>
+    <div class="row">{{user.FirstName}}</div>
+    <div class="row">{{user.LastName}}</div>
+    <div class="row">{{user.Profession}}</div>
+    <div class="row">{{user.DayOfBirht}}</div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
