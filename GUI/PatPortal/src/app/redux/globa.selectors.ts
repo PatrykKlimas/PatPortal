@@ -7,7 +7,7 @@ export interface State extends IAppState {
     users: IUserState
 }
 
-const getGlobalFutureState = createFeatureSelector<IUserState>(FeatureStates.Global);
+const getGlobalFutureState = createFeatureSelector<IUserState>(FeatureStates.User);
 
 export const getUser = createSelector(
     getGlobalFutureState,

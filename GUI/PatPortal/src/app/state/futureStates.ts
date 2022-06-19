@@ -1,3 +1,3 @@
 export const FeatureStates = {
-    Global: "global"
+    User: "user"
 }

@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+.bg-purple{
+    background-color: rgb(94, 4, 94);
+}
+
+.global-font{
+    font-family: Georgia,serif;
+}
