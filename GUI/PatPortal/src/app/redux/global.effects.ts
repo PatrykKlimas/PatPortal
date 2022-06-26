@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, of, pipe } from "rxjs";
+import { catchError, map, mergeMap, of } from "rxjs";
 import { PatPortalHttpService } from "../common/services/patportalhttp.service";
 import * as GlobalAsctions from "./global.actions";
 

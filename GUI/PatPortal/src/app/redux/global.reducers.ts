@@ -1,21 +1,25 @@
 import { createReducer, on } from "@ngrx/store";
+import { ICredentails } from "../common/models/ICredentials";
 import { IUser } from "../common/models/IUser";
 import * as GlobalActions from "./global.actions";
 
 export interface IUserState {
     user: IUser | null,
+    credentails: ICredentails,
     errorMessage: string
 }
 
 const initState: IUserState = {
     user: null,
+    credentails: {
+        Login: ''
+    },
     errorMessage: ''
 }
 
 export const globalReducer = createReducer(
     initState,
     on(GlobalActions.initializeUserSuccess, (state, props) : IUserState => {
-        console.log(props.user);
         return {
             ...state,
             errorMessage: '',
@@ -27,6 +31,14 @@ export const globalReducer = createReducer(
             ...state,
             user: null,
             errorMessage: props.error
+        }
+    }),
+    on(GlobalActions.setLogin, (state, props) => {
+        return {
+            ...state,
+            credentails: {
+                Login: props.login
+            }
         }
     })
 );

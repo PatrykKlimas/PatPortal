@@ -21,3 +21,7 @@
 <div *ngIf="!(user$ | async)" class="text-center">
   <pp-login></pp-login>
 </div>
+
+<div *ngIf="errorMessage$ | async as errorMessage" class="alert alert-danger" role="alert">
+  {{errorMessage}}
+</div>

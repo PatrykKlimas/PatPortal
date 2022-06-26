@@ -1,3 +1,4 @@
 export const FeatureStates = {
-    User: "user"
+    User: "user",
+    Main: "main"
 }

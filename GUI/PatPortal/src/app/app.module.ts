@@ -11,19 +11,21 @@ import { FeatureStates } from './state/futureStates';
 import { globalReducer } from './redux/global.reducers';
 import { environment } from 'src/environments/environment';
 import { UserEffects } from './redux/global.effects';
-import { LoginComponent } from './pages/logIn/login.component';
-import { UserComponent } from './pages/user/user.component';
-import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/credentials/login/login.component';
+import { FormsModule } from '@angular/forms';
+import { UserComponent } from './pages/main/user/user.component';
+import { HomeComponent } from './pages/main/home/home.component';
+import { MainModule } from './pages/main/main.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    UserComponent,
-    HomeComponent
   ],
   imports: [
+    MainModule,
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

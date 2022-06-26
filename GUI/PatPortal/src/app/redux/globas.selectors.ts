@@ -18,3 +18,8 @@ export const getErrorMessage = createSelector(
     getGlobalFutureState,
     state => state.errorMessage
 )
+
+export const getLogin = createSelector(
+    getGlobalFutureState,
+    state => state.credentails?.Login
+);

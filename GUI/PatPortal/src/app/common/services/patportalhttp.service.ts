@@ -20,7 +20,6 @@ export class PatPortalHttpService{
 
         return this.http.get<UserDto>(path)
             .pipe(
-                tap(user => console.log(user)),
                 map(userDto => this.mapper.Create(userDto)),
                 catchError(this.handleError)
             );
