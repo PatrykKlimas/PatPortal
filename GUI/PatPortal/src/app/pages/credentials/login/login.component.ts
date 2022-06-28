@@ -3,7 +3,9 @@ import { Store } from "@ngrx/store";
 import { State } from "../../../redux/globas.selectors";
 import * as GlobalActions from "../../../redux/global.actions";
 import * as GlobalSelectors from "../../../redux/globas.selectors";
-import { Observable } from "rxjs";
+import { Observable, tap } from "rxjs";
+import { Router } from "@angular/router";
+import { Location } from "@angular/common";
 
 @Component({
     selector: 'pp-login',
@@ -18,14 +20,21 @@ export class LoginComponent implements OnInit{
     password: string ="";
     logIn: string ='';
 
-    constructor(private store: Store<State>){}
+    constructor(private store: Store<State>, private router: Router, private location: Location){}
     ngOnInit(): void {
         this.store.select(GlobalSelectors.getLogin).subscribe(l => this.logIn = l);
+        this.store.select(GlobalSelectors.getUser).pipe(
+            tap(user => {
+                if(user)
+                this.router.navigate(['/main']);
+            })
+        ).subscribe();
     }
 
     login(): void{
-        if(this.logInValidation() && this.passwordValidation())
-            this.store.dispatch(GlobalActions.initializeUser({id: this.userId}))
+        if(this.logInValidation() && this.passwordValidation()){
+            this.store.dispatch(GlobalActions.initializeUser({id: this.userId}));
+        }
     }
 
     passwordValidation(): boolean{
