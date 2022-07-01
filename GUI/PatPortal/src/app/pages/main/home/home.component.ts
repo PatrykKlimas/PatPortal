@@ -2,9 +2,9 @@ import { Component } from "@angular/core";
 
 @Component({
     selector: 'pp-home',
-    template: './home.component.html',
+    templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
-export class HomeComponent{
+export class HomeComponent {
 
 }

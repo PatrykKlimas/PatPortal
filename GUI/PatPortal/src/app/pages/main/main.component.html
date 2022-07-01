@@ -1,3 +1,15 @@
-<div>
-  WItam
+<div *ngIf="user" class="row h2">
+  <div class="text-center border border-dar rounded col-4 bg-secondary">
+    {{user?.FirstName + " " + user?.LastName}}
+  </div>
+  <button (click)="navigateToUser()" class="text-center border border-dar rounded col-4 bg-secondary">
+    User
+  </button>
+  <button (click)="navigateToFriends()" class="text-center border border-dar rounded col-4 bg-secondary">
+    Friends
+  </button>
+
+</div>
+<div class="container">
+  <router-outlet></router-outlet>
 </div>

@@ -1,4 +1,6 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+import { RouterModule } from "@angular/router";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 import { FeatureStates } from "src/app/state/futureStates";
@@ -10,8 +12,11 @@ import { UserComponent } from "./user/user.component";
 
 @NgModule({
     imports: [
+        CommonModule,
         StoreModule.forFeature(FeatureStates.Main, mainReducer),
-        EffectsModule.forFeature([MainEffects])
+        EffectsModule.forFeature([MainEffects]),
+        RouterModule.forChild([])
+
     ],
     declarations: [
         MainComponent,
@@ -19,4 +24,4 @@ import { UserComponent } from "./user/user.component";
         HomeComponent
     ]
 })
-export class MainModule{}
+export class MainModule { }

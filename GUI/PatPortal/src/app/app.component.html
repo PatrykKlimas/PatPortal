@@ -1,26 +1,8 @@
 <div class="row bg-secondary h2">
-  <div class="text-center border border-dar rounded col-8">
+  <button (click)="navigateToMain()" class="text-center border border-dar rounded bg-secondary">
     {{title}}
-  </div>
-<!--  <div *ngIf="user$ | async as user" class="text-center border border-dar rounded col-4">-->
-<!--    {{user.FirstName + " " + user.LastName}}-->
-<!--  </div>-->
-<!--  <div *ngIf="!(user$ | async)" class="text-center border border-dar rounded col-4">-->
-<!--    Register-->
-<!--  </div>-->
-<!--</div>-->
+  </button>
 </div>
-<!--<div class="row" *ngIf="user$ | async as user">-->
-<!--  <div class="row">{{user.Id}}</div>-->
-<!--  <div class="row">{{user.FirstName}}</div>-->
-<!--  <div class="row">{{user.LastName}}</div>-->
-<!--  <div class="row">{{user.Profession}}</div>-->
-<!--  <div class="row">{{user.DayOfBirht}}</div>-->
-<!--</div>-->
-
-<!--<div *ngIf="!(user$ | async)" class="text-center">-->
-<!--  <pp-login></pp-login>-->
-<!--</div>-->
 
 <div *ngIf="errorMessage$ | async as errorMessage" class="alert alert-danger" role="alert">
   {{errorMessage}}
