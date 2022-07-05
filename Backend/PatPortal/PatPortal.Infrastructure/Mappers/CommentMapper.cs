@@ -40,7 +40,7 @@ namespace PatPortal.Infrastructure.Mappers
 
             return new CommentEntity(
                 comment.Id, 
-                user, 
+                user,
                 comment.Content,
                 comment.AddedDate, 
                 comment.EditedTime, 

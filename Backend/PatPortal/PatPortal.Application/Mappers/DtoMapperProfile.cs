@@ -47,7 +47,7 @@ namespace PatPortal.Application.Mappers
                 .ForCtorParam("id", src => src.MapFrom(s => Guid.Parse(s.Id)));
 
             CreateMap<Post, PostForViewDto>()
-                .ForMember(dest => dest.OwnerId, src => src.MapFrom(s => s.Owner.Id.ToString()));
+                .ForMember(dest => dest.OwnerId, src => src.MapFrom(s => s.Owner.Id.ToString()));               
         }
 
         private void CreateMappComments()

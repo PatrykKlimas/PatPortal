@@ -7,3 +7,4 @@ export interface State extends IAppState {
 }
 
 const getMainFeautureState = createFeatureSelector<MainState>('main');
+export const getPosts = createSelector(getMainFeautureState, state => state.posts);

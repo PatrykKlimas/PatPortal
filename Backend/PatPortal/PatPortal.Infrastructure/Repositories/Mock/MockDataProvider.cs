@@ -213,7 +213,7 @@ namespace PatPortal.Infrastructure.Repositories.Mock
                             "Fajny post 3",
                             DateTime.Parse("1/2/2022 16:30:00"),
                             DateTime.Parse("1/2/2022 16:30:00"),
-                            posts.ElementAt(1))
+                            posts.ElementAt(5))
 
             };
         }

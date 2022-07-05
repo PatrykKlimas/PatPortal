@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PatPortal.Application.Contracts.Commands.Posts;
 using PatPortal.Application.Contracts.Querries.Comments;
 using PatPortal.Application.Contracts.Querries.Posts;
+using PatPortal.Application.DTOs.Request.Comments;
 using PatPortal.Application.DTOs.Request.Posts;
 using PatPortal.Application.DTOs.Response.Comments;
 using PatPortal.Application.DTOs.Response.Posts;
@@ -28,6 +29,13 @@ namespace PatPortal.API.Controllers
         public async Task<ActionResult> UpdatePost([FromBody] PostForUpdateDto postToUpdate)
         {
             return await ExecuteResult<UpdatePostsCommand>(new UpdatePostsCommand(postToUpdate));
+        }
+
+        [HttpPatch("{id/comment")]
+        public async Task<ActionResult> UpdatePost(string id, [FromBody] CommentForCreationDto postToUpdate)
+        {
+            //return await ExecuteResult<UpdatePostsCommand>(new UpdatePostsCommand(postToUpdate));
+            //ToDo implement that
         }
 
         [HttpGet("{userId}/{requestorId}")]

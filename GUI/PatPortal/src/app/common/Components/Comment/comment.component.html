@@ -1,0 +1,9 @@
+<div *ngIf="comment" class="card text-white bg-dark m-1">
+  <div class="card-header border-light">{{comment.AddedDate}}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{comment.OwnerName}}</h5>
+    <p class="card-text">
+      {{comment.Content}}
+    </p>
+  </div>
+</div>

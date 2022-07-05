@@ -1,3 +1,12 @@
-<div>
-    Hello in the main page
+<div *ngIf="$currentUser | async as currentUser">
+    <pp-inputBox [title]="'Post'"></pp-inputBox>
+    <h3 class="text-center text-white bg-secondary border-dark mt-3">Posts:</h3>
+    <div *ngIf="extendedPosts.length > 0">
+    <div *ngFor="let extendedPost of extendedPosts" class="row">
+        <pp-post
+            [post]="extendedPost.post"
+            [showComments]="extendedPost.showComments"
+            (toogleCommentsReaction)="toogleComments(extendedPost.post)"
+        ></pp-post>
+    </div>
 </div>

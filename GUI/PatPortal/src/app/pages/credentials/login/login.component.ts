@@ -13,7 +13,7 @@ import { State } from "../../../redux/globas.selectors";
 })
 export class LoginComponent implements OnInit {
 
-    userId: string = "afdb21f2-66ad-48a2-a927-83f4d72a5258";
+    userId: string = "c2debe6b-619d-4595-aadb-c8878718af59";
     passwordError: string = "";
     logInError: string = "";
     password: string = "";

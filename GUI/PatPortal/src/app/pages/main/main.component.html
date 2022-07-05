@@ -1,4 +1,4 @@
-<div *ngIf="user" class="row h2">
+<div *ngIf="$user | async as user" class="row h2">
   <div class="text-center border border-dar rounded col-4 bg-secondary">
     {{user?.FirstName + " " + user?.LastName}}
   </div>

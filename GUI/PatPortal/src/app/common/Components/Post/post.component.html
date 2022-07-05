@@ -1,0 +1,18 @@
+﻿<div *ngIf="post" class="card text-white bg-secondary border-dark m-1">
+  <div class="card-header border-dark">{{post.AddedDate}}</div>
+  <div class="card-body">
+    <h5 class="card-title text-dark ">{{post.OwnerName}}</h5>
+    <p class="card-text">
+      {{post.Content}}
+    </p>
+    <button (click)="toogleComments()" class="text-center border border-dar rounded bg-secondary">
+      {{showComments ? "Hide" : "Show" }} {{"Comments"}}
+    </button>
+    <div *ngIf="post.AreCommentsLoaded && showComments">
+      <div *ngFor="let comment of post.Comments" class="row">
+        <pp-comment [comment]="comment"></pp-comment>
+      </div>
+    </div>
+    <pp-inputBox [title]="'Comment'"></pp-inputBox>
+  </div>
+</div>

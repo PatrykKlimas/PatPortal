@@ -11,6 +11,7 @@ namespace PatPortal.Domain.Entities.Posts
         public string Content { get; private set; }
         public DataAccess Access { get; private set; }
         public User Owner { get; private set; }
+        public string OwnerName  { get; private set; }
         public DateTime AddedDate { get; private set; }
         public DateTime EditedTime { get; private set; }
         public Post(Guid Id, 
@@ -25,6 +26,7 @@ namespace PatPortal.Domain.Entities.Posts
             Content = content;
             Access = access;
             Owner = owner;
+            OwnerName = Owner.FirstName + " " + Owner.LastName;
             AddedDate = addedDate;
             EditedTime = editedTime;
         }

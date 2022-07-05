@@ -10,15 +10,11 @@ import { Router } from "@angular/router";
     templateUrl: "./main.component.html",
     styleUrls: ["./main.component.css"]
 })
-export class MainComponent implements OnInit {
+export class MainComponent {
 
-    user: IUser | null = null;
-
+    $user = this.store.select(GlobalSelectors.getUser)
 
     constructor(private store: Store<State>, private router: Router) { }
-    ngOnInit(): void {
-        this.store.select(GlobalSelectors.getUser).subscribe(user => this.user = user);
-    }
 
     navigateToUser(): void {
         this.router.navigate(['main/user']);

@@ -7,6 +7,7 @@ namespace PatPortal.Domain.Entities.Comments
     public class Comment : Entity
     {
         public User Owner { get; private set; }
+        public string OwnerName { get; private set; }
         public string Content { get; private set; }
         public DateTime AddedDate { get; private set; }
         public DateTime EditedTime { get; private set; }
@@ -20,6 +21,7 @@ namespace PatPortal.Domain.Entities.Comments
             Post post) : base(Id)
         {
             Owner = owner;
+            OwnerName = owner.FirstName + " " + owner.LastName;
             Content = content;
             AddedDate = addedDate;
             EditedTime = editedTime;
