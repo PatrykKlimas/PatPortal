@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, mergeMap, of } from "rxjs";
+import { catchError, concatMap, map, merge, mergeMap, of, switchMap } from "rxjs";
+import { PostCommentRequestModel } from "src/app/common/Components/requestModels/postCommentRequestModel";
 import { PatPortalHttpService } from "src/app/common/services/patportalhttp.service";
 import * as MainActions from "../redux/main.actions";
 
@@ -29,4 +30,33 @@ export class MainEffects {
                 )
             ))
     });
+
+    $postComment = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(MainActions.initializePostComment),
+            switchMap(props => {
+                var request: PostCommentRequestModel = {
+                    ownerId: props.ownerId,
+                    content: props.content
+                };
+                return this.patPortalHttpService.postComment(props.postId, request)
+                    .pipe(
+                        map(commentId => MainActions.getComment({ commentId })),
+                        catchError(error => of(MainActions.initializePostCommentFail({ error: error })))
+                    )
+            }
+            ))
+    });
+
+    $getComment = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(MainActions.getComment),
+            mergeMap(props => this.patPortalHttpService.getComment(props.commentId)
+                .pipe(
+                    map(comment => MainActions.getCommentSuccess({ comment: comment })),
+                    catchError(error => of(MainActions.getCommentFail({ error: error })))
+                )
+            ))
+    });
+
 }

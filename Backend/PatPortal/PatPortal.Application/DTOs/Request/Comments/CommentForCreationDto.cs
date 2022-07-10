@@ -10,6 +10,5 @@ namespace PatPortal.Application.DTOs.Request.Comments
     {
         public string Ownerid { get; set; }
         public string Content { get; set; }
-        public string PostId { get; set; }
     }
 }

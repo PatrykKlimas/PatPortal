@@ -2,9 +2,10 @@ import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { map, tap } from "rxjs";
 import { IPost } from "src/app/common/models/IPost";
+import { IUser } from "src/app/common/models/IUser";
 import * as GlobalSelectors from "../../../redux/globas.selectors";
 import * as MainActions from "../redux/main.actions";
-import { MainState } from "../redux/main.reducers";
+import { mainReducer, MainState } from "../redux/main.reducers";
 import * as MainSelectors from "../redux/main.selectors";
 import { IExtendedPost } from "./IExntededPost";
 
@@ -18,6 +19,8 @@ export class HomeComponent {
     constructor(private store: Store<MainState>) { }
 
     extendedPosts: IExtendedPost[] = [];
+    user: IUser | null = null;
+
     $posts = this.store.select(MainSelectors.getPosts)
         .pipe(
             tap(posts => {
@@ -36,6 +39,7 @@ export class HomeComponent {
     $currentUser = this.store.select(GlobalSelectors.getUser)
         .pipe(
             tap(user => {
+                this.user = user;
                 if (user !== null)
                     this.store.dispatch(MainActions.initializePosts({ userId: user.Id }));
             })
@@ -44,6 +48,7 @@ export class HomeComponent {
     toogleComments(post: IPost): void {
         var extendedPost = this.extendedPosts.find(ePost => ePost.post.Id === post.Id);
 
+        //ToDo veryfy why after add new post before show comments we do not see other comments
         if (extendedPost) {
 
             var newExtendedPost: IExtendedPost = {
@@ -57,5 +62,10 @@ export class HomeComponent {
                 this.store.dispatch(MainActions.initializeComments({ postId: post.Id }));
 
         }
+    }
+
+    addComment(post: IPost, content: string){
+        if(this.user != null)
+            this.store.dispatch(MainActions.initializePostComment({postId: post.Id, content: content, ownerId: this.user?.Id} ))
     }
 }

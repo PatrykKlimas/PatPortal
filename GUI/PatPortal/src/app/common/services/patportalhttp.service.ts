@@ -1,8 +1,11 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { ThisReceiver } from "@angular/compiler";
 import { Injectable } from "@angular/core";
 import { catchError, map, Observable, tap, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
+import { PostCommentRequestModel } from "../Components/requestModels/postCommentRequestModel";
 import { CommentDto } from "../dtos/CommentDto";
+import { IIdentityDto } from "../dtos/IIdentityDto";
 import { PostDto } from "../dtos/PostDto";
 import { UserDto } from "../dtos/UserDto";
 import { IComment } from "../models/IComment";
@@ -45,6 +48,26 @@ export class PatPortalHttpService {
     return this.http.get<CommentDto[]>(path)
       .pipe(
         map(comments => comments.map(comment => this.mapper.CreateComment(comment))),
+        catchError(this.handleError)
+      );
+  }
+
+  public getComment(commentId: string) : Observable<IComment>{
+    var path = this.url + `post/comment/${commentId}`;
+
+    return this.http.get<CommentDto>(path)
+      .pipe(
+        map(comment =>  this.mapper.CreateComment(comment)),
+        catchError(this.handleError)
+      );
+  }
+
+  public postComment(postId: string, request: PostCommentRequestModel) : Observable<string>{
+    var path = this.url + `post/${postId}/comment`;
+
+    return this.http.post(path, request, {responseType: 'text'})
+      .pipe(
+        map(commentId => commentId),
         catchError(this.handleError)
       );
   }

@@ -23,13 +23,13 @@ export const mainReducer = createReducer(
         console.log(props.error);
         return state;
     }),
-    on(MainActions.initializeCommentsSuccess, (state, props) =>{
+    on(MainActions.initializeCommentsSuccess, (state, props) => {
         const post = state.posts.find(p => p.Id === props.postId);
 
-        if(post === undefined)
+        if (post === undefined)
             return state;
 
-        var newPost : IPost = {
+        var newPost: IPost = {
             ...post,
             Comments: props.comments,
             AreCommentsLoaded: true
@@ -39,7 +39,7 @@ export const mainReducer = createReducer(
 
         return {
             ...state,
-            posts : posts
+            posts: posts
         }
 
     }),
@@ -47,4 +47,30 @@ export const mainReducer = createReducer(
         console.log(props.error);
         return state;
     }),
+    on(MainActions.initializePostCommentFail, (state, props) => {
+        console.log(props.error);
+        return state;
+    }),
+    on(MainActions.getCommentFail, (state, props) => {
+        console.log(props.error);
+        return state;
+    }),
+    on(MainActions.getCommentSuccess, (state, props) => {
+        var post = state.posts.find(post => post.Id == props.comment.PostId);
+        if (post === undefined)
+            return state
+
+        var comments = post?.Comments.filter(c => c.Id !== props.comment.Id);
+        comments?.push(props.comment);
+        var newPost: IPost = {
+            ...post,
+            Comments: comments,
+            AreCommentsLoaded: true
+        }
+
+        return {
+            ...state,
+            posts: state.posts.map(p => p.Id === newPost?.Id ? newPost : p)
+        }
+    })
 );

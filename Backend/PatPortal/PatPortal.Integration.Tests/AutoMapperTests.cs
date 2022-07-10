@@ -1,7 +1,6 @@
 using AutoMapper;
 using NUnit.Framework;
 using PatPortal.Application.Mappers;
-using PatPortal.Infrastructure.Mappers;
 
 namespace PatPortal.Integration.Tests
 {
@@ -15,7 +14,6 @@ namespace PatPortal.Integration.Tests
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<DtoMapperProfile>();
-                cfg.AddProfile<InfrastructureMapperProfile>();
             }).CreateMapper();
 
             //Act & Assert

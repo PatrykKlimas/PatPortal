@@ -41,6 +41,7 @@ export class PatPortalMapper {
 
     public CreateComment(commentDto: CommentDto) : IComment{
         return{
+            Id: commentDto.id,
             OwnerId: commentDto.ownerId,
             OwnerName: commentDto.ownerName,
             Content: commentDto.content,

@@ -12,8 +12,8 @@ namespace PatPortal.Infrastructure.Repositories.Mock
         }
         public async Task<Comment> AddAsync(Comment comment)
         {
-            var newComments = _comments;
-            newComments.ToList().Add(comment);
+            var newComments = _comments.ToList();
+            newComments.Add(comment);
 
             _comments = newComments;
             var newComment = _comments.FirstOrDefault(c => c.Id == comment.Id);

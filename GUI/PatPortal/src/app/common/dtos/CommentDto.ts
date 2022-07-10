@@ -1,4 +1,5 @@
 export interface CommentDto{
+    id: string;
     ownerId: string;
     ownerName: string;
     content: string;

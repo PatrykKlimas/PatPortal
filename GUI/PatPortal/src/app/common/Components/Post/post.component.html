@@ -13,6 +13,7 @@
         <pp-comment [comment]="comment"></pp-comment>
       </div>
     </div>
-    <pp-inputBox [title]="'Comment'"></pp-inputBox>
+    <pp-inputBox [title]="'Comment'"
+                 (textValue)="postComment($event)"></pp-inputBox>
   </div>
 </div>

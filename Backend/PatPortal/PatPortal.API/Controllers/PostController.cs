@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PatPortal.Application.Contracts.Commands.Comments;
 using PatPortal.Application.Contracts.Commands.Posts;
 using PatPortal.Application.Contracts.Querries.Comments;
 using PatPortal.Application.Contracts.Querries.Posts;
@@ -14,7 +15,7 @@ namespace PatPortal.API.Controllers
     [Route("api/post")]
     public class PostController : AppControllerBase<PostController>
     {
-        public PostController(ILogger<PostController> logger, IMediator mediator) : 
+        public PostController(ILogger<PostController> logger, IMediator mediator) :
             base(logger, mediator)
         {
         }
@@ -31,11 +32,17 @@ namespace PatPortal.API.Controllers
             return await ExecuteResult<UpdatePostsCommand>(new UpdatePostsCommand(postToUpdate));
         }
 
-        [HttpPatch("{id/comment")]
-        public async Task<ActionResult> UpdatePost(string id, [FromBody] CommentForCreationDto postToUpdate)
+        //ToDo - move all comments endpoints to the separate endpoint
+
+        [HttpGet("comment/{id}")]
+        public async Task<ActionResult<CommentForViewDto>> GetCommentsAsync(string id)
         {
-            //return await ExecuteResult<UpdatePostsCommand>(new UpdatePostsCommand(postToUpdate));
-            //ToDo implement that
+            return await ExecuteResult<GetCommentQuery, CommentForViewDto>(new GetCommentQuery(id), HttpMethod.Get);
+        }
+        [HttpPost("{id}/comment")]
+        public async Task<ActionResult<string>> CreateComment(string id, [FromBody] CommentForCreationDto postToUpdate)
+        {
+            return await ExecuteResult<CreateCommentCommand, string>(new CreateCommentCommand(id , postToUpdate.Ownerid, postToUpdate.Content), HttpMethod.Post); 
         }
 
         [HttpGet("{userId}/{requestorId}")]
