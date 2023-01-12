@@ -34,8 +34,7 @@ namespace PatPortal.Application.Mappers
 
             CreateMap<UserForUpdateDto, UserUpdate>()
                 .ForCtorParam("email", src => src.MapFrom(s => new Email(s.Email)))
-                .ForCtorParam("dayOfBirht", src => src.MapFrom(s => s.DayOfBirht.ParseToDateTime()))
-                .ForCtorParam("id", src => src.MapFrom(s => Guid.Parse(s.Id)));
+                .ForCtorParam("dayOfBirht", src => src.MapFrom(s => s.DayOfBirht.ParseToDateTime()));
         }
         private void CreateMapsForPosts()
         {

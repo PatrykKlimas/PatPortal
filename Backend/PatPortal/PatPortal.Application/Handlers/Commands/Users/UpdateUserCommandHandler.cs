@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using PatPortal.Application.Contracts.Commands.Users;
+using PatPortal.Application.Factories.Interfaces;
 using PatPortal.Domain.Entities.Users.Requests;
 using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Services.Interfaces;
@@ -11,21 +12,25 @@ namespace PatPortal.Application.Handlers.Commands.Users
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
+        private readonly IUserDtoFactory _userDtoFactory;
 
-        public UpdateUserCommandHandler(IUserService userService, IMapper mapper)
+        public UpdateUserCommandHandler(IUserService userService, IUserDtoFactory userDtoFactory)
         {
             _userService = userService;
-            _mapper = mapper;
+            _userDtoFactory = userDtoFactory;
         }
         public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var userDto = request.User;
-            var id = userDto.Id.ParseToGuidOrEmpty();
-            if (id == Guid.Empty)
-                throw new InitValidationException($"Inncorect user id: {userDto.Id}");
+            var id = request.Id.ParseToGuidOrEmpty();
 
-            var userForUpdate = _mapper.Map<UserUpdate>(userDto);
+            if (id == Guid.Empty)
+                throw new InitValidationException($"Inncorect user id: {request.Id}");
+
+            if (!request.User.DayOfBirht.ParsebleToDateTime())
+                throw new InitValidationException($"Unable to parse {request.User.DayOfBirht} to DateTime.");
+
+            var userForUpdate = _userDtoFactory.Create(id, request.User);
             await _userService.UpdateAsync(userForUpdate);
 
             return Unit.Value;

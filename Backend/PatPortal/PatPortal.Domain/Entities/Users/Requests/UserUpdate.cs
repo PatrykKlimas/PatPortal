@@ -10,7 +10,7 @@ namespace PatPortal.Domain.Entities.Users.Requests
     public class UserUpdate : UserBase
     {
         public byte[] Photo { get; private set; }
-        public string Profession { get; set; }
+        public string Profession { get; private set; }
 
         public UserUpdate(
             Guid id, 

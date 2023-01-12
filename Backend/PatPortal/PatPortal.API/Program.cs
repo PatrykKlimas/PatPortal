@@ -1,14 +1,22 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using PatPortal.API.CustomMiddlewere;
 using PatPortal.Application.Configuration;
+using PatPortal.Database;
 using PatPortal.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Add services to the container.
+var settings = builder.Configuration.Get<ApplicationConfiguration>();
+
+builder.Services.AddDbContext<PatPortalDbContext>(options =>
+    options.UseSqlServer(settings.ConnectionStrings.PatPortalDataBase),
+    ServiceLifetime.Transient);
+
 builder.Services.AddControllers()
         .AddFluentValidation( fv =>
         {
@@ -20,11 +28,9 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var settings = builder.Configuration.Get<ApplicationConfiguration>();
-
 //Dependency Injection using autofac
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => {
-                builder.RegisterModule(new ApplicationModule(settings));
+                builder.RegisterModule(new ApplicationModule());
                 builder.RegisterModule(new InfrastructureModule(settings));
                 builder.RegisterModule(new DomainModule(settings));
             });

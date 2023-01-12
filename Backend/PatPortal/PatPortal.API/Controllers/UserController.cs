@@ -51,9 +51,9 @@ namespace PatPortal.API.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<ActionResult> UpdateAsync([FromBody] UserForUpdateDto user)
+        public async Task<ActionResult> UpdateAsync(string id, [FromBody] UserForUpdateDto user)
         {
-            return await ExecuteResult<UpdateUserCommand>(new UpdateUserCommand(user));
+            return await ExecuteResult<UpdateUserCommand>(new UpdateUserCommand(id, user));
         }
 
 
