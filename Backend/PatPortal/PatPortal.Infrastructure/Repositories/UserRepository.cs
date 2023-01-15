@@ -5,68 +5,91 @@ using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Domain.ValueObjects;
 using PatPortal.Infrastructure.Factories.Interfaces;
+using PatPortal.SharedKernel.Database;
+using PatPortal.SharedKernel.Database.Interfaces;
 
-namespace PatPortal.Infrastructure.Repositories.Mock
+namespace PatPortal.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly PatPortalDbContext _context;
+        private readonly IContextProvider<PatPortalDbContext> _contextProvider;
         private readonly IUserMapper _userFactory;
 
-        public UserRepository(PatPortalDbContext context, IUserMapper userFactory)
+        public UserRepository(IContextProvider<PatPortalDbContext> contextProvider, IUserMapper userFactory)
         {
-            _context = context;
+            _contextProvider = contextProvider;
             _userFactory = userFactory;
         }
+
         public async Task<User> AddAsync(User user)
         {
-            var userDb = _userFactory.Create(user);
+            return await _contextProvider.RunAsync(async context =>
+            {
+                var userDb = _userFactory.Create(user);
 
-            await _context.AddAsync(userDb);
-            await _context.SaveChangesAsync();
+                context.Add(userDb);
+                await SaveChangesAsync(context);
 
-            var newUser = await _context.Users.FirstOrDefaultAsync(userDb => user.Id == userDb.Id);
+                var newUser = await context.Users.FirstOrDefaultAsync(userDb => user.Id == userDb.Id);
 
-            if (newUser is null)
-                throw new InvalidOperationException("User cannot be saved to the database.");
+                if (newUser is null)
+                    throw new InvalidOperationException("User cannot be saved to the database.");
 
-            return _userFactory.Create(newUser);
+                return _userFactory.Create(newUser);
+            });
         }
 
         public async Task<User> GetOrDefaultAsync(Guid Id)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(user => user.Id == Id);
+            return await _contextProvider.RunAsync(async context =>
+            {
+                var user = await context.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(user => user.Id == Id);
 
-            return user is null ? default : _userFactory.Create(user);
+                return user is null ? default : _userFactory.Create(user);
+            });
         }
 
+        //Implement filters
         public async Task<User> GetOrDefaultByEmailAsync(Email email)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(user => user.Email.ToUpper() == email.ToString().ToUpper());
+            return await _contextProvider.RunAsync(async context =>
+            {
+                var user = await context.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(user => user.Email.ToUpper() == email.ToString().ToUpper());
 
-            return user is null ? default : _userFactory.Create(user);
+                return user is null ? default : _userFactory.Create(user);
+            });
         }
 
         public async Task<User> UpdateAsync(User user)
         {
-            var userDb = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+            return await _contextProvider.RunAsync(async context =>
+            {
+                var userDb = context.Users.FirstOrDefault(u => u.Id == user.Id);
 
-            if (userDb is null)
-                throw new EntityNotFoundException($"User with id {user.Id} not found.");
+                if (userDb is null)
+                    throw new EntityNotFoundException($"User with id {user.Id} not found.");
 
-            userDb = _userFactory.Create(user);
-            await SaveChangesAsync();
+                userDb.LastName = user.LastName;
+                userDb.Email = user.Email.ToString();
+                userDb.Profession = user.Profession;
+                userDb.DayOfBirth = user.DayOfBirht;
+                userDb.Photo = user.Photo;
 
-            return _userFactory.Create(userDb);
+                await SaveChangesAsync(context);
+
+                return _userFactory.Create(userDb);
+            });
         }
 
-        private async Task SaveChangesAsync()
+        private async Task SaveChangesAsync(PatPortalDbContext context)
         {
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }catch
             {
                 throw new InvalidOperationException("Unable to save changes. Please try leater.");

@@ -1,10 +1,12 @@
 ﻿using Autofac;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PatPortal.Database;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Infrastructure.Factories;
 using PatPortal.Infrastructure.Repositories;
 using PatPortal.Infrastructure.Repositories.Mock;
+using PatPortal.SharedKernel.Database;
 
 namespace PatPortal.Infrastructure.Configuration
 {
@@ -32,19 +34,26 @@ namespace PatPortal.Infrastructure.Configuration
 
         private void LoadDatabase(ContainerBuilder builder)
         {
-            builder.Register(c =>
+            var contextBuilder = new DbContextOptionsBuilder<PatPortalDbContext>();
+            contextBuilder.UseSqlServer(_settings.ConnectionStrings.PatPortalDataBase, builder =>
             {
-                var options = new DbContextOptionsBuilder<PatPortalDbContext>();
-                options.UseSqlServer(_settings.ConnectionStrings.PatPortalDataBase, optionsBuilder =>
-                {
-                    optionsBuilder.EnableRetryOnFailure(
-                        maxRetryCount: 10,
-                        maxRetryDelay: TimeSpan.FromSeconds(30),
-                        errorNumbersToAdd: null);
-                });
+                builder.EnableRetryOnFailure(
+                    maxRetryCount: 10,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+            });
+            contextBuilder.EnableSensitiveDataLogging();
 
-                return new PatPortalDbContext(options.Options);
-            }).AsSelf().InstancePerLifetimeScope();
+            builder.Register(_ => contextBuilder.Options)
+                .As<DbContextOptions<PatPortalDbContext>>()
+                .InstancePerLifetimeScope();
+
+            //builder.Register(provider => new PatPortalDbContext(contextBuilder.Options))
+            //    .InstancePerLifetimeScope();
+
+            builder.RegisterType<ContextProvider<PatPortalDbContext>>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
 
         private void LoadRepositories(ContainerBuilder builder)

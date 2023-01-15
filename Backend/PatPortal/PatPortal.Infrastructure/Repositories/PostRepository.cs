@@ -6,7 +6,7 @@ using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Infrastructure.Factories.Interfaces;
 
-namespace PatPortal.Infrastructure.Repositories.Mock
+namespace PatPortal.Infrastructure.Repositories
 {
     public class PostRepository : IPostRepository
     {

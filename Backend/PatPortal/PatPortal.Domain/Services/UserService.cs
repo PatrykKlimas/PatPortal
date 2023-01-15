@@ -31,7 +31,8 @@ namespace PatPortal.Domain.Services
             if (!validationResult.IsValid)
                 throw new CustomValidationnException(validationResult);
 
-            if ((await userTask) is not null)
+            var userByEmail = await userTask;
+            if (userByEmail is not null && userForCreate.Email != userByEmail.Email)
                 throw new DomainValidationException($"User with email: {userForCreate.Email} already exists.");
 
             var newUser = new User(
