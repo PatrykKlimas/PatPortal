@@ -6,11 +6,11 @@ namespace PatPortal.API.Controllers
 {
     [ApiController]
     [Route("api/friendship")]
-    public class FriendshipController : AppControllerBase<FriendshipController>
+    public class FriendshipController : AppControllerBase<FriendshipController> 
     {
 
-        public FriendshipController(ILogger<FriendshipController> logger, IMediator mediator) 
-            : base(logger, mediator)
+        public FriendshipController(ILogger<FriendshipController> logger, IMediator mediator, IHttpContextAccessor httpContextAccessor) 
+            : base(logger, mediator, httpContextAccessor)
         {
         }
         [HttpPost]

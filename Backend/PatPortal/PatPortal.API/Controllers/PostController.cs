@@ -15,15 +15,16 @@ namespace PatPortal.API.Controllers
     [Route("api/post")]
     public class PostController : AppControllerBase<PostController>
     {
-        public PostController(ILogger<PostController> logger, IMediator mediator) :
-            base(logger, mediator)
+        public PostController(
+            ILogger<PostController> logger, IMediator mediator, HttpContextAccessor httpContextAccessor) :
+            base(logger, mediator, httpContextAccessor)
         {
         }
 
         [HttpPost]
         public async Task<ActionResult<string>> CreatePost([FromBody] PostForCreationDto postToCreate)
         {
-            return await ExecuteResult<CreatePostsCommand, string>(new CreatePostsCommand(postToCreate), HttpMethod.Post);
+            return await ExecuteResult<CreatePostsCommand, string>(new CreatePostsCommand(postToCreate));
         }
 
         [HttpPatch("{id}")]
@@ -37,30 +38,30 @@ namespace PatPortal.API.Controllers
         [HttpGet("comment/{id}")]
         public async Task<ActionResult<CommentForViewDto>> GetCommentsAsync(string id)
         {
-            return await ExecuteResult<GetCommentQuery, CommentForViewDto>(new GetCommentQuery(id), HttpMethod.Get);
+            return await ExecuteResult<GetCommentQuery, CommentForViewDto>(new GetCommentQuery(id));
         }
         [HttpPost("{id}/comment")]
         public async Task<ActionResult<string>> CreateComment(string id, [FromBody] CommentForCreationDto postToUpdate)
         {
-            return await ExecuteResult<CreateCommentCommand, string>(new CreateCommentCommand(id , postToUpdate.Ownerid, postToUpdate.Content), HttpMethod.Post); 
+            return await ExecuteResult<CreateCommentCommand, string>(new CreateCommentCommand(id , postToUpdate.Ownerid, postToUpdate.Content)); 
         }
 
         [HttpGet("{userId}/{requestorId}")]
         public async Task<ActionResult<IEnumerable<PostForViewDto>>> GetByUser(string userId, string requestorId)
         {
-            return await ExecuteResult<GetPostsByUserQuerry, IEnumerable<PostForViewDto>>(new GetPostsByUserQuerry(userId, requestorId), HttpMethod.Get);
+            return await ExecuteResult<GetPostsByUserQuerry, IEnumerable<PostForViewDto>>(new GetPostsByUserQuerry(userId, requestorId));
         }
 
         [HttpGet("{requestorId}")]
         public async Task<ActionResult<IEnumerable<PostForViewDto>>> GetForUserToSee(string requestorId)
         {
-            return await ExecuteResult<GetPostsForUserToSeeQuerry, IEnumerable<PostForViewDto>>(new GetPostsForUserToSeeQuerry(requestorId), HttpMethod.Get);
+            return await ExecuteResult<GetPostsForUserToSeeQuerry, IEnumerable<PostForViewDto>>(new GetPostsForUserToSeeQuerry(requestorId));
         }
 
         [HttpGet("{postId}/comments")]
         public async Task<ActionResult<IEnumerable<CommentForViewDto>>> GetComments(string postId)
         {
-            return await ExecuteResult<GetPostCommentsQuerry, IEnumerable<CommentForViewDto>>(new GetPostCommentsQuerry(postId), HttpMethod.Get);
+            return await ExecuteResult<GetPostCommentsQuerry, IEnumerable<CommentForViewDto>>(new GetPostCommentsQuerry(postId));
         }
 
 

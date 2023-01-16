@@ -5,6 +5,7 @@ using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Domain.ValueObjects;
 using PatPortal.Infrastructure.Factories.Interfaces;
+using PatPortal.Infrastructure.Repositories.Filters;
 using PatPortal.SharedKernel.Database;
 using PatPortal.SharedKernel.Database.Interfaces;
 
@@ -95,5 +96,17 @@ namespace PatPortal.Infrastructure.Repositories
                 throw new InvalidOperationException("Unable to save changes. Please try leater.");
             }
         }
+
+        //private IQueryable<User> Filter(this IQueryable<User> userQuery, IDictionary<string, string> filters)
+        //{
+        //    foreach (var filter in filters)
+        //    {
+
+        //    }
+        //    if (key == UserFilters.EmailEqual)
+        //        return userQuery.Where(user => user.Email.ToString() == value);
+
+        //    return userQuery;
+        //}
     }
 }

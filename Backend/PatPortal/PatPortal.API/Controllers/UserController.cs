@@ -11,8 +11,8 @@ namespace PatPortal.API.Controllers
     [Route("api/user")]
     public class UserController : AppControllerBase<UserController>
     {
-        public UserController(ILogger<UserController> logger, IMediator mediator)
-            : base(logger, mediator)
+        public UserController(ILogger<UserController> logger, IMediator mediator, IHttpContextAccessor httpContextAccessor)
+            : base(logger, mediator, httpContextAccessor)
         {
         }
 
@@ -20,33 +20,33 @@ namespace PatPortal.API.Controllers
         [Route("{id}")]
         public async Task<ActionResult<UserForViewDto>> GetAsync(string id)
         {
-            return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(id), HttpMethod.Get);
+            return await ExecuteResult<GetUserQuerry, UserForViewDto>(new GetUserQuerry(id));
         }
 
         [HttpPost]
         [Route("")]
         public async Task<ActionResult<string>> CreateAsync([FromBody] UserForCreationDto user)
         {
-            return await ExecuteResult<CreateUserCommand, string>(new CreateUserCommand(user), HttpMethod.Post);
+            return await ExecuteResult<CreateUserCommand, string>(new CreateUserCommand(user));
         }
 
         [HttpGet]
         [Route("{id}/friends")]
         public async Task<ActionResult<IEnumerable<UserForViewDto>>> GetFriends(string id)
         {
-            return await ExecuteResult<GetFriendsQuerry, IEnumerable<UserForViewDto>>(new GetFriendsQuerry(id), HttpMethod.Get);
+            return await ExecuteResult<GetFriendsQuerry, IEnumerable<UserForViewDto>>(new GetFriendsQuerry(id));
         }
         [HttpGet]
         [Route("{id}/invitations")]
         public async Task<ActionResult<IEnumerable<UserForViewDto>>> GetInvitations(string id)
         {
-            return await ExecuteResult<GetInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetInvitationsQuerry(id), HttpMethod.Get);
+            return await ExecuteResult<GetInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetInvitationsQuerry(id));
         }
         [HttpGet]
         [Route("{id}/sentInvitations")]
         public async Task<ActionResult<IEnumerable<UserForViewDto>>> GetSentInvitations(string id)
         {
-            return await ExecuteResult<GetSentInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetSentInvitationsQuerry(id), HttpMethod.Get);
+            return await ExecuteResult<GetSentInvitationsQuerry, IEnumerable<UserForViewDto>>(new GetSentInvitationsQuerry(id));
         }
 
         [HttpPatch]
