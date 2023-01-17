@@ -1,8 +1,8 @@
-﻿namespace PatPortal.Infrastructure.Repositories.Filters
+﻿namespace PatPortal.SharedKernel.Database
 {
-    public class FilterProvider<TEntity> where TEntity : class
+    public class EntityFilter<TEntity> where TEntity : class
     {
-        public FilterProvider(Func<string, Func<TEntity, bool>> filterFunction, string description)
+        public EntityFilter(Func<string, Func<TEntity, bool>> filterFunction, string description)
         {
             FilterFunction = filterFunction;
             Description = description;

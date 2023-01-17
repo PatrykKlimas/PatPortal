@@ -1,9 +1,11 @@
 ﻿using Autofac;
+using PatPortal.Domain.Filters;
 using PatPortal.Domain.Services;
 using PatPortal.Domain.Validators.Comments;
 using PatPortal.Domain.Validators.Factories;
 using PatPortal.Domain.Validators.Posts;
 using PatPortal.Domain.Validators.Users;
+using PatPortal.Infrastructure.Repositories.Filters;
 
 namespace PatPortal.Infrastructure.Configuration
 {
@@ -20,6 +22,14 @@ namespace PatPortal.Infrastructure.Configuration
             LoadServices(builder);
             LoadFactories(builder);
             LoadValidator(builder);
+            LoadFilters(builder);
+        }
+
+        private void LoadFilters(ContainerBuilder builder)
+        {
+            builder.RegisterType<UserFiltersFactory>()
+                .As<IUserFilters>()
+                .InstancePerLifetimeScope();
         }
 
         private void LoadValidator(ContainerBuilder builder)

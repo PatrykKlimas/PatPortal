@@ -5,9 +5,8 @@ using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Domain.ValueObjects;
 using PatPortal.Infrastructure.Factories.Interfaces;
-using PatPortal.Infrastructure.Repositories.Filters;
-using PatPortal.SharedKernel.Database;
 using PatPortal.SharedKernel.Database.Interfaces;
+using UserDb = PatPortal.Database.Models.User;
 
 namespace PatPortal.Infrastructure.Repositories
 {
@@ -15,11 +14,16 @@ namespace PatPortal.Infrastructure.Repositories
     {
         private readonly IContextProvider<PatPortalDbContext> _contextProvider;
         private readonly IUserMapper _userFactory;
+        private readonly IEntityFiltersFactory<UserDb> _userFiltersFactory;
 
-        public UserRepository(IContextProvider<PatPortalDbContext> contextProvider, IUserMapper userFactory)
+        public UserRepository(
+            IContextProvider<PatPortalDbContext> contextProvider, 
+            IUserMapper userFactory,
+            IEntityFiltersFactory<UserDb> entityFiltersFactory)
         {
             _contextProvider = contextProvider;
             _userFactory = userFactory;
+            _userFiltersFactory = entityFiltersFactory;
         }
 
         public async Task<User> AddAsync(User user)
@@ -37,6 +41,17 @@ namespace PatPortal.Infrastructure.Repositories
                     throw new InvalidOperationException("User cannot be saved to the database.");
 
                 return _userFactory.Create(newUser);
+            });
+        }
+
+        public async Task<IEnumerable<User>> GetAsync(IDictionary<string, string> filters)
+        {
+            return await _contextProvider.RunAsync(async context =>
+            {
+                var users = context.Users.AsQueryable();
+                var filteredUsers = await _userFiltersFactory.Filter(users, filters).ToListAsync();
+
+                return filteredUsers.Select(userDb => _userFactory.Create(userDb));
             });
         }
 

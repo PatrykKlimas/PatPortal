@@ -4,11 +4,6 @@ using PatPortal.Domain.Entities.Comments.Requests;
 using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Services.Interfaces;
 using PatPortal.SharedKernel.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PatPortal.Application.Handlers.Commands.Comments
 {

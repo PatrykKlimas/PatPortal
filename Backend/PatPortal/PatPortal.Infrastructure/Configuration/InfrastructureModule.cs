@@ -2,11 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PatPortal.Database;
+using PatPortal.Database.Models;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Infrastructure.Factories;
 using PatPortal.Infrastructure.Repositories;
+using PatPortal.Infrastructure.Repositories.Filters;
 using PatPortal.Infrastructure.Repositories.Mock;
 using PatPortal.SharedKernel.Database;
+using PatPortal.SharedKernel.Database.Interfaces;
 
 namespace PatPortal.Infrastructure.Configuration
 {
@@ -23,6 +26,14 @@ namespace PatPortal.Infrastructure.Configuration
             LoadRepositories(builder);
             LoadDatabase(builder);
             LoadFactories(builder);
+            LoadFilters(builder);
+        }
+
+        private void LoadFilters(ContainerBuilder builder)
+        {
+            builder.RegisterType<UserFiltersFactory>()
+                .As<IEntityFiltersFactory<User>>()
+                .InstancePerLifetimeScope();
         }
 
         private void LoadFactories(ContainerBuilder builder)

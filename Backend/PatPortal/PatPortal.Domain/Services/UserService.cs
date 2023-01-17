@@ -1,6 +1,7 @@
 ﻿using PatPortal.Domain.Entities.Users;
 using PatPortal.Domain.Entities.Users.Requests;
 using PatPortal.Domain.Exceptions;
+using PatPortal.Domain.Filters;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Domain.Services.Interfaces;
 using PatPortal.Domain.Validators.Factories.Interfaces;
@@ -12,26 +13,30 @@ namespace PatPortal.Domain.Services
         private readonly IUserRepository _userRepository;
         private readonly IUserValidatorFactory _userValidatorFactory;
         private readonly IFriendshipRepository _friendshipRepository;
+        private readonly IUserFilters _userFilters;
 
         public UserService(
             IUserRepository userRepository,
             IUserValidatorFactory userValidatorFactory,
-            IFriendshipRepository friendshipRepository)
+            IFriendshipRepository friendshipRepository,
+            IUserFilters userFilters)
         {
             _friendshipRepository = friendshipRepository;
+            _userFilters = userFilters;
             _userRepository = userRepository;
             _userValidatorFactory = userValidatorFactory;
         }
 
         public async Task<Guid> CreateAsync(UserCreate userForCreate)
         {
-            var userTask = _userRepository.GetOrDefaultByEmailAsync(userForCreate.Email);
+            var filter = new Dictionary<string, string> { { _userFilters.EmailEqual, userForCreate.Email.ToString() } };
+            var userTask = _userRepository.GetAsync(filter);
             var validationResult = await _userValidatorFactory.Validate(userForCreate);
 
             if (!validationResult.IsValid)
                 throw new CustomValidationnException(validationResult);
 
-            var userByEmail = await userTask;
+            var userByEmail = (await userTask).FirstOrDefault();
             if (userByEmail is not null && userForCreate.Email != userByEmail.Email)
                 throw new DomainValidationException($"User with email: {userForCreate.Email} already exists.");
 
@@ -51,7 +56,8 @@ namespace PatPortal.Domain.Services
 
         public async Task UpdateAsync(UserUpdate userForUpdate)
         {
-            var userByEmailTask = _userRepository.GetOrDefaultByEmailAsync(userForUpdate.Email);
+            var filter = new Dictionary<string, string> { { _userFilters.EmailEqual, userForUpdate.Email.ToString() } };
+            var userByEmailTask = _userRepository.GetAsync(filter);
             var userTask = _userRepository.GetOrDefaultAsync(userForUpdate.Id);
 
             var validationResult = await _userValidatorFactory.Validate(userForUpdate);
@@ -63,7 +69,7 @@ namespace PatPortal.Domain.Services
             if (user == default)
                 throw new EntityNotFoundException($"User with id: {userForUpdate.Id} does not exist.");
 
-            var userByEmail = await userByEmailTask;
+            var userByEmail = (await userByEmailTask).FirstOrDefault();
             if (userByEmail != default && !userForUpdate.Email.Equals(user.Email))
             {
                 if (userByEmail.Id != userForUpdate.Id)

@@ -48,5 +48,11 @@ namespace PatPortal.Infrastructure.Repositories.Mock
 
             return await Task.FromResult(user);
         }
+
+        public Task<IEnumerable<User>> GetAsync(IDictionary<string, string> filters)
+        {
+            //ToDo
+            throw new NotImplementedException();
+        }
     }
 }
