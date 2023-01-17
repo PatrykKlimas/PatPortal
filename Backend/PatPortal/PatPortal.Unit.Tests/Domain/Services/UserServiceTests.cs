@@ -5,6 +5,7 @@ using PatPortal.Domain.Entities.Friendships;
 using PatPortal.Domain.Entities.Users;
 using PatPortal.Domain.Entities.Users.Requests;
 using PatPortal.Domain.Exceptions;
+using PatPortal.Domain.Filters;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Domain.Services;
 using PatPortal.Domain.Services.Interfaces;
@@ -12,6 +13,7 @@ using PatPortal.Domain.Validators.Factories;
 using PatPortal.Domain.Validators.Factories.Interfaces;
 using PatPortal.Domain.Validators.Users;
 using PatPortal.Domain.ValueObjects;
+using PatPortal.Infrastructure.Repositories.Filters;
 using PatPortal.Infrastructure.Repositories.Mock;
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,7 @@ namespace PatPortal.Unit.Tests.Domain.Services
         private IValidator<UserUpdate> _userUpdateValidator;
         private IEnumerable<Friendship> _friendships;
         private IEnumerable<User> _users;
+        private IUserFilters _userFilters;
 
         private readonly string _id = "b20b88cd-90a0-4594-b67f-232cbd984a07";
         [SetUp]
@@ -44,8 +47,10 @@ namespace PatPortal.Unit.Tests.Domain.Services
             _friendships = MockDataProvider.MockFriendships();
             _users = MockDataProvider.MockUsers();
 
+            _userFilters = new UserFiltersFactory();
+
             _userValidatorFactory = new UserValidatorFaactory(_userCreateValidator, _userUpdateValidator);
-            _userService = new UserService(_userRepository, _userValidatorFactory, _friendshipRepository);
+            _userService = new UserService(_userRepository, _userValidatorFactory, _friendshipRepository, _userFilters);
         }
 
         #region Create User
@@ -87,8 +92,17 @@ namespace PatPortal.Unit.Tests.Domain.Services
             string errMsg)
         {
             //Arrange
-            _userRepository.GetOrDefaultByEmailAsync(new Email(email)).Returns(
-                new User(Guid.Parse(_id), firstName, lastName, new Email(email), "" ,DateTime.Parse(dayOfBirth), new byte[] { })
+            _userRepository.GetAsync(
+                Arg.Is<IDictionary<string, string>>(filter => filter.Values.All(value => value == email)))
+                .Returns(
+                    new List<User> {
+                        new User(
+                            Guid.Parse(_id), 
+                            firstName, 
+                            lastName, 
+                            new Email(email), "" ,DateTime.Parse(dayOfBirth), 
+                            new byte[] { })
+                    }
             );
 
             var userCreate = new UserCreate(Guid.Parse(_id), firstName, lastName, new Email(email), DateTime.Parse(dayOfBirth));
@@ -210,7 +224,11 @@ namespace PatPortal.Unit.Tests.Domain.Services
                                     new Email("pat@onet.pl"), profession, DateTime.Parse(dayOfBirth), fileBytes);
 
             _userRepository.GetOrDefaultAsync(Guid.Parse(_id)).Returns(user);
-            _userRepository.GetOrDefaultByEmailAsync(new Email("pat@onet.pl")).Returns(otherUser);
+
+            //Arrange
+            _userRepository.GetAsync(
+                Arg.Is<IDictionary<string, string>>(filter => filter.Values.All(value => value == "pat@onet.pl")))
+                .Returns(new List<User> { otherUser });
 
             //Act & Assert
             var ex = Assert.ThrowsAsync<DomainValidationException>(async () => await _userService.UpdateAsync(userCreate));

@@ -5,6 +5,7 @@ using PatPortal.Domain.Exceptions;
 using PatPortal.Domain.Repositories.Interfaces;
 using PatPortal.Domain.ValueObjects;
 using PatPortal.Infrastructure.Factories.Interfaces;
+using PatPortal.SharedKernel.Database.Filtration.Interfaces;
 using PatPortal.SharedKernel.Database.Interfaces;
 using UserDb = PatPortal.Database.Models.User;
 

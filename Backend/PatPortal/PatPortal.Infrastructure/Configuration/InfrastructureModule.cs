@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using PatPortal.Database;
 using PatPortal.Database.Models;
 using PatPortal.Domain.Repositories.Interfaces;
@@ -9,7 +8,7 @@ using PatPortal.Infrastructure.Repositories;
 using PatPortal.Infrastructure.Repositories.Filters;
 using PatPortal.Infrastructure.Repositories.Mock;
 using PatPortal.SharedKernel.Database;
-using PatPortal.SharedKernel.Database.Interfaces;
+using PatPortal.SharedKernel.Database.Filtration.Interfaces;
 
 namespace PatPortal.Infrastructure.Configuration
 {

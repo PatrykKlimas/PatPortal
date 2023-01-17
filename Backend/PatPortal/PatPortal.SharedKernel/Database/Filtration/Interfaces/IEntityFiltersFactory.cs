@@ -1,4 +1,4 @@
-﻿namespace PatPortal.SharedKernel.Database.Interfaces
+﻿namespace PatPortal.SharedKernel.Database.Filtration.Interfaces
 {
     public interface IEntityFiltersFactory<TEntity> where TEntity : class
     {
